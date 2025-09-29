@@ -1,0 +1,27 @@
+{
+  "donghoangngoc@gmail.com": {
+    "id": "google_donghoangngoc@gmail.com",
+    "email": "donghoangngoc@gmail.com",
+    "name": "donghoangngoc",
+    "provider": "google",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "addedBy": "admin_001",
+    "dateAdded": "2025-09-28T14:22:45.460Z",
+    "status": "activated",
+    "firstLoginDate": "2025-09-28T14:23:52.828Z",
+    "lastLoginDate": "2025-09-28T14:23:52.828Z",
+    "profileComplete": true,
+    "lastActive": 1759069432828,
+    "isProfileComplete": true,
+    "sessionActive": false,
+    "picture": "https://ui-avatars.com/api/?name=donghoangngoc&background=28a745&color=fff&bold=true"
+  }
+}

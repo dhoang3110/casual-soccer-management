@@ -1,0 +1,59 @@
+# Netlify deployment configuration
+# This file ensures proper deployment of your Soccer Team Manager app
+
+[build]
+  # The directory to publish (current directory since it's a static site)
+  publish = "."
+  
+  # Command to run before deployment (if needed)
+  # command = "echo 'Building Soccer Team Manager...'"
+
+# Redirect rules
+[[redirects]]
+  # Handle client-side routing - redirect all requests to index.html
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Headers for better security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Performance headers
+    Cache-Control = "public, max-age=3600"
+
+# Special headers for static assets
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+
+# Environment-specific settings
+[context.production]
+  # Production-specific settings
+  command = "echo 'Deploying to production...'"
+
+[context.deploy-preview]
+  # Deploy preview settings (for pull requests)
+  command = "echo 'Deploying preview...'"
+
+[context.branch-deploy]
+  # Branch deploy settings
+  command = "echo 'Deploying branch...'"

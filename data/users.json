@@ -1,0 +1,122 @@
+{
+  "google_casual@admin-added.local": {
+    "id": "google_casual@admin-added.local",
+    "googleId": "admin_added_1759069290570_b29pztqhb",
+    "email": "casual@admin-added.local",
+    "picture": "https://ui-avatars.com/api/?name=Casual&background=007bff&color=fff&bold=true",
+    "provider": "admin_casual",
+    "lastActive": 1759069306598,
+    "isProfileComplete": true,
+    "name": "Casual",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "phone": "1234567890",
+    "addedBy": "admin_001",
+    "dateAdded": "2025-09-28T14:21:30.570Z",
+    "status": "activated",
+    "profileComplete": true,
+    "sessionActive": false,
+    "loggedOut": true,
+    "lastLogout": 1759069306570
+  },
+  "google_admin@soccermanager.local": {
+    "id": "admin_001",
+    "name": "Admin (Quick Access)",
+    "email": "admin@soccermanager.local",
+    "picture": "https://ui-avatars.com/api/?name=Admin&background=dc3545&color=fff&bold=true",
+    "provider": "admin",
+    "role": "administrator",
+    "positions": [
+      "any"
+    ],
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "lastLogin": 1759069825751,
+    "sessionActive": true,
+    "loggedOut": false,
+    "lastLogout": null,
+    "lastActive": 1759069825799
+  },
+  "google_casue.2@admin-added.local": {
+    "id": "google_casue.2@admin-added.local",
+    "googleId": "google_casue.2@admin-added.local",
+    "email": "casue.2@admin-added.local",
+    "picture": "https://ui-avatars.com/api/?name=Casue%202&background=007bff&color=fff&bold=true",
+    "provider": "admin_casual",
+    "lastActive": 1759069690197,
+    "isProfileComplete": true,
+    "name": "Casue 2",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "phone": "543254353223",
+    "addedBy": "admin_001",
+    "dateAdded": "2025-09-28T14:22:57.959Z",
+    "status": "activated",
+    "profileComplete": true,
+    "sessionActive": false,
+    "loggedOut": true,
+    "lastLogout": 1759069690188
+  },
+  "google_hoangngocdong@gmail.com": {
+    "id": "google_hoangngocdong@gmail.com",
+    "googleId": "google_hoangngocdong@gmail.com",
+    "email": "hoangngocdong@gmail.com",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocI6QO5j7RqypSUUHw6A_NXzG-FtqrMEF64I9uOzDgUvOGQSGijF=s96-c",
+    "provider": "google",
+    "lastActive": 1759069543385,
+    "isProfileComplete": true,
+    "name": "Dong Hoang",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "sessionActive": false,
+    "loggedOut": true,
+    "lastLogout": 1759069543360
+  },
+  "google_donghoangngoc@gmail.com": {
+    "id": "google_donghoangngoc@gmail.com",
+    "googleId": "google_donghoangngoc@gmail.com",
+    "email": "donghoangngoc@gmail.com",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocK4CNCovxLUHuzG51dKgCyg3HPez0LkCQaIsT3FRwJr3qKTfg=s96-c",
+    "provider": "google",
+    "lastActive": 1759069785911,
+    "isProfileComplete": true,
+    "name": "Dong Hoang",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "sessionActive": false,
+    "loggedOut": true,
+    "lastLogout": 1759069785893
+  }
+}

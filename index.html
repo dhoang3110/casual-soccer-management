@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Team Management System</title>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-modal">
+            <h2>⚽ Welcome to Sunday Social Soccer</h2>
+            
+            <button id="googleLoginBtn" class="social-login-btn google-btn">
+                <svg class="login-icon" viewBox="0 0 24 24">
+                    <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Member login with Google
+            </button>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e9ecef;">
+                <div style="padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                    <p style="font-size: 1.1em; color: #495057; margin-bottom: 15px; font-weight: bold; text-align: center;">📱 Login with Phone Number</p>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="tel" id="smartPhoneInput" placeholder="Put your phone number" 
+                               onkeypress="if(event.key==='Enter') smartPhoneLogin()"
+                               style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
+                        <button onclick="smartPhoneLogin()" style="padding: 12px 10px; background: #28a745; border-radius: 6px; border: 1px solid #28a745; color: white; font-weight: bold; cursor: pointer; white-space: nowrap; font-size: 16px;">
+                            Continue
+                        </button>
+                    </div>
+
+                </div>
+                
+                <p style="font-size: 0.9em; color: #6c757d; margin-bottom: 10px; margin-top: 15px;">Admin Access:</p>
+                <button id="adminLoginBtn" class="social-login-btn" style="background: #dc3545; color: white; border-color: #dc3545;">
+                    🔐 Admin Login
+                </button>
+                
+                <!-- Development Test Button -->
+                <button id="testServerBtn" class="social-login-btn" style="background: #17a2b8; color: white; border-color: #17a2b8; margin-top: 10px;">
+                    🔌 Test Server Connection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guest Login Modal -->
+    <div id="guestLoginModal" class="login-overlay" style="display: none;">
+        <div class="login-modal">
+            <div class="modal-header">
+                <h2>� Complete Your Registration</h2>
+                <p style="color: #6c757d; font-size: 0.9em; margin-bottom: 15px;">This phone number is new! Let's set up your player profile</p>
+            </div>
+            
+            <form id="guestLoginForm" onsubmit="handleGuestFormSubmit(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="form-group">
+                    <label for="guestName" style="display: block; margin-bottom: 5px; font-weight: bold;">Your Name *</label>
+                    <input type="text" id="guestName" placeholder="Enter your name" required 
+                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestPhone" style="display: block; margin-bottom: 5px; font-weight: bold;">Phone Number *</label>
+                    <input type="tel" id="guestPhone" placeholder="Enter your phone number" required
+                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    <p style="font-size: 0.8em; color: #6c757d; margin-top: 5px;">Use this number to login again later</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestSkillLevel" style="display: block; margin-bottom: 5px; font-weight: bold;">Your Skill Level *</label>
+                    <select id="guestSkillLevel" required 
+                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                        <option value="excellent">Excellent (4 pts) - Pro level, very experienced</option>
+                        <option value="good">Good (3 pts) - Solid player, good technique</option>
+                        <option value="average" selected>Average (2 pts) - Decent player, some experience</option>
+                        <option value="basic">Basic (1 pt) - Beginner, learning the game</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestPositions" style="display: block; margin-bottom: 5px; font-weight: bold;">Preferred Positions *</label>
+                    <p style="font-size: 0.8em; color: #6c757d; margin-bottom: 8px;">Hold Ctrl/Cmd to select multiple positions</p>
+                    <select id="guestPositions" multiple required size="5" 
+                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                        <option value="goalkeeper">🥅 Goalkeeper</option>
+                        <option value="defender">🛡️ Defender</option>
+                        <option value="midfielder">⚽ Midfielder</option>
+                        <option value="forward">🎯 Forward</option>
+                        <option value="any" selected>🔄 Any Position</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" style="flex: 1; background: #28a745; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                        ✅ Join as Guest
+                    </button>
+                    <button type="button" id="cancelGuestLogin" onclick="hideGuestLogin()" style="flex: 1; background: #6c757d; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                        ❌ Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Profile Setup Modal -->
+    <div id="userProfileModal" class="login-overlay" style="display: none;">
+        <div class="login-modal">
+            <div class="modal-header">
+                <h2>🏃‍♂️ Complete Your Profile</h2>
+                <p>Welcome! Please provide your information to get started.</p>
+            </div>
+            <div class="profile-form">
+                <div class="form-group">
+                    <label for="profileName">Your Name</label>
+                    <input type="text" id="profileName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileSkillLevel">Your Skill Level</label>
+                    <select id="profileSkillLevel" required>
+                        <option value="">Select your skill level</option>
+                        <option value="excellent">Excellent (4 pts) - Pro level, very experienced</option>
+                        <option value="good">Good (3 pts) - Solid player, good technique</option>
+                        <option value="average">Average (2 pts) - Decent player, some experience</option>
+                        <option value="basic">Basic (1 pt) - Beginner, learning the game</option>
+                    </select>
+                </div>
+                <button id="saveProfileBtn" class="login-btn" onclick="saveUserProfile()">
+                    Complete Setup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>⚽ Soccer Team Manager</h1>
+                    <p>Organize your casual soccer games with balanced teams</p>
+                </div>
+                <div id="userInfo" class="user-info" style="display: none;">
+                    <img id="userAvatar" class="user-avatar" src="" alt="User Avatar">
+                    <span id="userName">User Name</span>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button id="signupTab" class="tab-button active" onclick="switchTab('signup')">Weekly Signup</button>
+            <button id="adminTab" class="tab-button admin-only" onclick="switchTab('admin')">🔐 Admin</button>
+        </div>
+
+
+
+        <!-- Signup Tab -->
+                <!-- Weekly Signup Tab -->
+        <div id="signup" class="tab-content active">
+            <div class="signup-list">
+                <div class="signup-header">
+                    <h2>⚽ Weekly Game Signup</h2>
+                    <div class="week-selector">
+                        <div id="signupWeekDisplay" class="week-display" style="padding: 10px 15px; background: #e3f2fd; border-radius: 8px; font-weight: bold; color: #1565c0;">
+                            <!-- Admin-controlled week will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Admin Controls (only visible to administrators) -->
+                <div class="admin-section admin-only" style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">🔐 Admin Controls</h3>
+                    
+                    <!-- Weekly Signup Management -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">📅 Weekly Signup Management</h4>
+                        <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 15px;">
+                            <div class="signup-controls" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label for="adminWeekDate" style="font-weight: 600; color: #495057; margin-bottom: 8px; display: block;">
+                                        Select Game Week: 
+                                        <small style="font-weight: normal; color: #6c757d;">(Always changeable)</small>
+                                    </label>
+                                    <input type="date" id="adminWeekDate" onchange="handleAdminWeekChange()">
+                                </div>
+                                <button id="toggleSignupBtn" class="toggle-btn signup-closed" onclick="toggleAdminSignup()">
+                                    <span class="icon">🔒</span>
+                                    <span class="text">Open Signup</span>
+                                </button>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.85em; color: #6c757d;">
+                                💡 <strong>Tip:</strong> Date picker locks when sessions are active to prevent accidental changes. 
+                                Close all sessions to switch dates.
+                            </div>
+                        </div>
+                        <div id="currentSignupInfo" style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3; display: none;">
+                            <!-- Current signup info will be displayed here -->
+                        </div>
+                    </div>
+
+                    <!-- Player Management -->
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">👥 Add Casual Player</h4>
+                        <div class="add-player-form" style="display: flex; gap: 10px; align-items: end; flex-wrap: wrap;">
+                            <div class="form-group" style="margin: 0;">
+                                <label for="playerName">Casual Name</label>
+                                <input type="text" id="playerName" placeholder="Enter casual name" onkeypress="if(event.key==='Enter') addPlayer()">
+                            </div>
+                            <div class="form-group" style="margin: 0;">
+                                <label for="skillLevel">Skill Level</label>
+                                <select id="skillLevel">
+                                    <option value="excellent">Excellent (4 pts)</option>
+                                    <option value="good">Good (3 pts)</option>
+                                    <option value="average" selected>Average (2 pts)</option>
+                                    <option value="basic">Basic (1 pt)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin: 0;">
+                                <label for="playerPosition">Positions (Hold Ctrl/Cmd for multiple)</label>
+                                <select id="playerPosition" multiple size="5" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-width: 150px;">
+                                    <option value="goalkeeper">🥅 Goalkeeper</option>
+                                    <option value="defender">🛡️ Defender</option>
+                                    <option value="midfielder">⚽ Midfielder</option>
+                                    <option value="forward">🎯 Forward</option>
+                                    <option value="any" selected>🔄 Any Position</option>
+                                </select>
+                            </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label for="playerPhone">Phone Number *</label>
+                                    <input type="tel" id="playerPhone" placeholder="Enter phone number" required pattern="[0-9]{10,}" title="Enter a valid phone number (at least 10 digits)">
+                                </div>
+                            <button class="btn" onclick="addPlayer()">Add Player</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="signupStatusMessage" class="signup-status-message" style="margin: 15px 0; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center;">
+                    <!-- Signup status message will be displayed here -->
+                </div>
+                
+                <!-- Hidden week date input for synchronization with admin controls -->
+                <input type="date" id="weekDate" style="display: none;" onchange="if (window.app) window.app.loadSignups()">
+                
+                <div style="margin-bottom: 20px;">
+                    <strong>Signed up players: <span id="signupCount">0</span></strong>
+                </div>
+
+                <!-- Teams Display Section -->
+                <div id="teamsSection" style="display: none; margin-bottom: 25px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">⚽ Generated Teams</h3>
+                    <div id="teamsDisplay">
+                        <!-- Generated teams will appear here -->
+                    </div>
+                </div>
+                
+                <div id="signupList">
+                    <!-- Signed up players will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tab -->
+        <div id="admin" class="tab-content admin-only">
+            <div class="admin-dashboard">
+                <h2>🔐 Admin Dashboard</h2>
+                
+                <!-- Member Management Section -->
+                <div class="admin-section" style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">👥 Member Management</h3>
+                    <p style="color: #666; margin-bottom: 20px;">Manage authorized Gmail addresses for system access. Only users with approved emails can sign in.</p>
+                    
+                    <!-- Add Member Form -->
+                    <div class="add-member-form" style="margin-bottom: 25px;">
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Add New Member</h4>
+                        <div style="display: flex; gap: 10px; align-items: end; flex-wrap: wrap;">
+                            <div class="form-group" style="margin: 0; flex: 1; min-width: 250px;">
+                                <label for="memberEmail">Gmail Address</label>
+                                <input type="email" id="memberEmail" placeholder="user@gmail.com" onkeypress="if(event.key==='Enter') addMember()">
+                            </div>
+                            <div class="form-group" style="margin: 0; min-width: 150px;">
+                                <label for="memberName">Display Name</label>
+                                <input type="text" id="memberName" placeholder="Full name" required>
+                            </div>
+                            <div class="form-group" style="margin: 0; min-width: 120px;">
+                                <label for="memberSkillLevel">Skill Level</label>
+                                <select id="memberSkillLevel">
+                                    <option value="basic">Basic (1 pt)</option>
+                                    <option value="average" selected>Average (2 pts)</option>
+                                    <option value="good">Good (3 pts)</option>
+                                    <option value="excellent">Excellent (4 pts)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin: 0; min-width: 150px;">
+                                <label for="memberPosition">Positions (Hold Ctrl/Cmd for multiple)</label>
+                                <select id="memberPosition" multiple size="5" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                    <option value="goalkeeper">🥅 Goalkeeper</option>
+                                    <option value="defender">🛡️ Defender</option>
+                                    <option value="midfielder">⚽ Midfielder</option>
+                                    <option value="forward">🎯 Forward</option>
+                                    <option value="any" selected>🔄 Any Position</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success" onclick="addMember()" style="padding: 10px 20px;">
+                                ➕ Add Member
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Casual Player Management Section -->
+                    <div style="margin-bottom: 25px; padding: 15px; background: #fdf2e9; border: 1px solid #f4a261; border-radius: 8px;">
+                        <h4 style="color: #e76f51; margin-bottom: 10px;">🚫 Casual Player Management</h4>
+                        <p style="color: #e76f51; margin-bottom: 15px; font-size: 0.9em;">
+                            Bulk operations for casual players (players without Gmail accounts). This will NOT affect authorized members.
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <button id="removeAllCasualsBtn" class="btn" onclick="removeAllCasualPlayers()" style="background: #e76f51; color: white; border: 1px solid #e76f51; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
+                                🚫 Remove All Casual Players
+                            </button>
+                            <span id="casualPlayersCount" style="color: #e76f51; font-weight: bold; margin-left: 10px;">
+                                <!-- Casual player count will be shown here -->
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.8em; color: #e76f51;">
+                            ⚠️ <strong>Note:</strong> This action removes ALL casual players from current signups and permanently deletes their profiles. 
+                            Members with Gmail accounts are protected and will not be affected.
+                        </div>
+                    </div>
+
+                    <!-- Reset System Section -->
+                    <div style="margin-bottom: 25px; padding: 15px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px;">
+                        <h4 style="color: #856404; margin-bottom: 10px;">⚠️ System Reset</h4>
+                        <p style="color: #856404; margin-bottom: 15px; font-size: 0.9em;">
+                            Reset all system data including players, signups, and close all signup sessions. This action cannot be undone.
+                        </p>
+                        <button id="resetBtn" class="btn btn-warning" onclick="resetAllData()" style="background: #ffc107; color: #212529; border: 1px solid #ffc107; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
+                            🔄 Reset All Data
+                        </button>
+                    </div>
+
+                    <!-- Test Data Import -->
+                    <div style="margin-bottom: 25px; padding: 15px; background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 8px;">
+                        <h4 style="color: #0c5460; margin-bottom: 10px;">🧪 Test Data Management</h4>
+                        <p style="color: #0c5460; margin-bottom: 15px; font-size: 0.9em;">
+                            Import dummy data for testing including sample members, users, and signups. Great for development and demo purposes.
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="importTestDataBtn" class="btn btn-info" onclick="importTestData()" style="background: #17a2b8; color: white; border: 1px solid #17a2b8; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
+                                📥 Import Test Data
+                            </button>
+                            <button id="viewTestDataBtn" class="btn btn-secondary" onclick="viewTestDataInfo()" style="background: #6c757d; color: white; border: 1px solid #6c757d; padding: 8px 16px; border-radius: 4px;">
+                                👁️ Preview Test Data
+                            </button>
+                        </div>
+                        <div id="testDataInfo" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 4px; display: none;"></div>
+                    </div>
+
+                    <!-- Members List -->
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 15px;">Authorized Members</h4>
+                        <div id="membersList" class="members-container">
+                            <!-- Members will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Statistics -->
+                <div class="admin-section" style="background: #e3f2fd; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">📊 System Statistics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #007bff;">👥</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;" id="totalMembers">0</div>
+                            <div style="color: #666;">Total Members</div>
+                        </div>
+                        <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #28a745;">⚽</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;" id="totalPlayers">0</div>
+                            <div style="color: #666;">Registered Players</div>
+                        </div>
+                        <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #ffc107;">📅</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;" id="activeSignups">0</div>
+                            <div style="color: #666;">Active Signups</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Payment Modal -->
+    <div id="membershipModal" class="login-overlay" style="display: none;">
+        <div class="login-modal">
+            <div class="modal-header">
+                <h2>💳 Membership Required</h2>
+                <p>Access to this system requires membership approval.</p>
+            </div>
+            <div class="membership-info" style="text-align: center; padding: 20px;">
+                <div style="font-size: 3em; margin-bottom: 20px;">⚽</div>
+                <h3 style="color: #dc3545; margin-bottom: 15px;">Your email is not authorized</h3>
+                <p style="margin-bottom: 20px; color: #666;">
+                    To gain access to the Soccer Team Management System, you need to become a member.
+                </p>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">Membership Fee</h4>
+                    <div style="font-size: 2em; font-weight: bold; color: #007bff;">$40</div>
+                    <p style="color: #666; margin-top: 10px;">One-time payment for lifetime access</p>
+                </div>
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h4 style="color: #856404; margin-bottom: 10px;">💳 Payment Instructions</h4>
+                    <p style="color: #856404; margin-bottom: 10px; font-weight: bold;">
+                        Please transfer $40 to the following bank account:
+                    </p>
+                    <div style="background: #ffffff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; text-align: center;">
+                        <div style="font-size: 1.5em; font-weight: bold; color: #007bff; letter-spacing: 2px;">
+                            123456
+                        </div>
+                        <div style="color: #666; font-size: 0.9em; margin-top: 5px;">Bank Account Number</div>
+                    </div>
+                </div>
+                <p style="margin-bottom: 20px; font-size: 0.9em; color: #666;">
+                    After making the payment, please contact the system administrator to get your email added to the authorized list.
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn btn-primary" onclick="contactAdmin()" style="padding: 10px 20px;">
+                        📧 Contact Admin
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeMembershipModal()" style="padding: 10px 20px;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Environment Configuration (must load first) -->
+    <script src=".env.js"></script>
+    <script src="js/config/appConfig.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/sharedUtils.js?v=1727519600"></script>
+    <script src="js/dataSync.js?v=1727519328"></script>
+    <script src="js/auth.js?v=1727519500"></script>
+    <script src="js/app.js?v=1759061500"></script>
+    
+    <!-- Ensure removeAllCasualPlayers function is available for onclick -->
+    <script>
+        // Fallback function definition if not loaded from app.js
+        if (typeof window.removeAllCasualPlayers === 'undefined') {
+            console.log('⚠️ removeAllCasualPlayers not found in app.js, defining fallback');
+            window.removeAllCasualPlayers = function() {
+                console.log('🔴 Fallback removeAllCasualPlayers called');
+                
+                // Wait for app to be ready or show error
+                if (window.app && typeof window.app.removeAllCasualPlayers === 'function') {
+                    window.app.removeAllCasualPlayers();
+                } else {
+                    console.error('❌ App not ready');
+                    alert('❌ System not ready. Please refresh the page and wait for it to fully load, then try again.');
+                }
+            };
+        } else {
+            console.log('✅ removeAllCasualPlayers loaded from app.js');
+        }
+        
+        // Fallback function for guest login if not loaded from app.js
+        if (typeof window.showGuestLogin === 'undefined') {
+            console.log('⚠️ showGuestLogin not found in app.js, defining HTML fallback');
+            window.showGuestLogin = function() {
+                console.log('🔴 HTML fallback showGuestLogin called');
+                
+                // Show modal directly without waiting
+                const guestModal = document.getElementById('guestLoginModal');
+                const loginOverlay = document.getElementById('loginOverlay');
+                
+                if (guestModal) {
+                    if (loginOverlay) loginOverlay.style.display = 'none';
+                    guestModal.style.display = 'flex';
+                    console.log('✅ Guest modal shown via HTML fallback');
+                    
+                    // Focus on name input
+                    const nameInput = document.getElementById('guestName');
+                    if (nameInput) {
+                        setTimeout(() => nameInput.focus(), 100);
+                    }
+                } else {
+                    console.error('❌ Guest modal not found');
+                    alert('❌ Guest registration form not available. Please refresh the page and try again.');
+                }
+            };
+        } else {
+            console.log('✅ showGuestLogin loaded from app.js');
+        }
+        
+        // Global function to hide guest login modal
+        window.hideGuestLogin = function() {
+            console.log('🔴 Global hideGuestLogin called');
+            const guestModal = document.getElementById('guestLoginModal');
+            const loginOverlay = document.getElementById('loginOverlay');
+            
+            if (guestModal) guestModal.style.display = 'none';
+            if (loginOverlay) loginOverlay.style.display = 'flex';
+            
+            // Clear form
+            const nameInput = document.getElementById('guestName');
+            const skillSelect = document.getElementById('guestSkillLevel');
+            const positionsSelect = document.getElementById('guestPositions');
+            
+            if (nameInput) nameInput.value = '';
+            if (skillSelect) skillSelect.selectedIndex = 0;
+            if (positionsSelect) {
+                Array.from(positionsSelect.options).forEach(option => {
+                    option.selected = option.value === 'any';
+                });
+            }
+        };
+        
+        // Global function to handle guest form submission
+        window.handleGuestFormSubmit = function(event) {
+            event.preventDefault();
+            console.log('🔴 Global handleGuestFormSubmit called');
+            
+            if (window.authManager && typeof window.authManager.handleGuestLogin === 'function') {
+                window.authManager.handleGuestLogin();
+            } else {
+                console.log('🔄 AuthManager not available, using standalone guest login');
+                handleStandaloneGuestLogin();
+            }
+        };
+        
+        // Standalone guest login handler that doesn't require AuthManager
+        function handleStandaloneGuestLogin() {
+            console.log('🔴 Standalone guest login handler called');
+            
+            const nameInput = document.getElementById('guestName');
+            const phoneInput = document.getElementById('guestPhone');
+            const skillSelect = document.getElementById('guestSkillLevel');
+            const positionsSelect = document.getElementById('guestPositions');
+            
+            if (!nameInput || !skillSelect || !positionsSelect) {
+                alert('❌ Form error. Please refresh and try again.');
+                return;
+            }
+            
+            const name = nameInput.value.trim();
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            const skill = skillSelect.value;
+            const selectedPositions = Array.from(positionsSelect.selectedOptions).map(option => option.value);
+            
+            // Validation
+            if (!name) {
+                alert('Please enter your name');
+                nameInput.focus();
+                return;
+            }
+            
+            if (name.length < 2) {
+                alert('Name must be at least 2 characters long');
+                nameInput.focus();
+                return;
+            }
+            
+            if (!skill) {
+                alert('Please select your skill level');
+                skillSelect.focus();
+                return;
+            }
+            
+            if (selectedPositions.length === 0) {
+                alert('Please select at least one position');
+                positionsSelect.focus();
+                return;
+            }
+            
+            if (!phone) {
+                alert('Please enter your phone number');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (phone.length < 10) {
+                alert('Please enter a valid phone number (at least 10 digits)');
+                phoneInput.focus();
+                return;
+            }
+            
+            // Check if guest already exists with this phone number
+            const storedUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+            const cleanPhone = phone.replace(/\s+/g, '').replace(/[-()]/g, '');
+            const existingGuest = Object.values(storedUsers).find(user => {
+                const isGuestUser = user.provider === 'guest_casual' || user.provider === 'admin_casual' || user.provider === 'guest' || user.provider === 'admin';
+                if (!isGuestUser || !user.phone) return false;
+                const userCleanPhone = user.phone.replace(/\s+/g, '').replace(/[-()]/g, '');
+                return userCleanPhone === cleanPhone;
+            });
+            
+            if (existingGuest) {
+                // Login existing guest
+                localStorage.setItem('currentUser', JSON.stringify(existingGuest));
+                
+                // Hide modal
+                const guestModal = document.getElementById('guestLoginModal');
+                if (guestModal) guestModal.style.display = 'none';
+                
+                alert(`✅ Welcome back, ${existingGuest.name}!\n\nLogged in successfully with your phone number.`);
+                
+                // Refresh page to show logged in state
+                window.location.reload();
+                return;
+            }
+            
+            // Create guest user object
+            const userId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const skillInfo = {
+                excellent: { label: 'Excellent', points: 4, description: 'Pro level, very experienced' },
+                good: { label: 'Good', points: 3, description: 'Solid player, good technique' },
+                average: { label: 'Average', points: 2, description: 'Decent player, some experience' },
+                basic: { label: 'Basic', points: 1, description: 'Beginner, learning the game' }
+            }[skill] || { label: 'Average', points: 2, description: 'Decent player, some experience' };
+            
+            const guestUser = {
+                id: userId,
+                name: name,
+                email: `${name.toLowerCase().replace(/\s+/g, '.')}@guest.local`,
+                phone: phone,
+                provider: 'guest_casual',
+                role: 'player',
+                skillLevel: skill,
+                skillInfo: skillInfo,
+                positions: selectedPositions,
+                addedBy: 'self',
+                dateAdded: new Date().toISOString(),
+                status: 'activated',
+                firstLoginDate: new Date().toISOString(),
+                lastLoginDate: new Date().toISOString(),
+                profileComplete: true,
+                lastActive: Date.now(),
+                isProfileComplete: true,
+                sessionActive: true,
+                picture: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=28a745&color=fff&bold=true`
+            };
+            
+            console.log('✅ Guest user created:', guestUser);
+            
+            // Save to localStorage
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+            existingUsers[userId] = guestUser;
+            localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+            
+            // Hide modal
+            const guestModal = document.getElementById('guestLoginModal');
+            if (guestModal) guestModal.style.display = 'none';
+            
+            // Show success and wait for system to be ready
+            alert(`✅ Welcome, ${name}!\n\nYou've been registered as a guest player. The system will initialize shortly...`);
+            
+            // Try to initialize the system or wait for it
+            waitForSystemInitialization(guestUser);
+        }
+        
+        // Smart phone login function - handles both login and registration
+        window.smartPhoneLogin = function() {
+            const phoneInput = document.getElementById('smartPhoneInput');
+            if (!phoneInput) {
+                alert('❌ Phone input not found. Please refresh and try again.');
+                return;
+            }
+            
+            const phone = phoneInput.value.trim();
+            if (!phone) {
+                alert('Please enter your phone number');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (phone.length < 10) {
+                alert('Please enter a valid phone number (at least 10 digits)');
+                phoneInput.focus();
+                return;
+            }
+            
+            console.log('🔍 Checking phone number:', phone);
+            
+            // Check if AuthManager is available
+            if (window.authManager && typeof window.authManager.checkExistingGuestByPhone === 'function') {
+                window.authManager.checkExistingGuestByPhone(phone).then(existingGuest => {
+                    if (existingGuest) {
+                        // Existing user - login directly
+                        console.log('✅ Existing user found:', existingGuest.name);
+                        window.authManager.currentUser = existingGuest;
+                        
+                        // Update session status
+                        existingGuest.sessionActive = true;
+                        existingGuest.loggedOut = false;
+                        existingGuest.lastActive = Date.now();
+                        
+                        if (typeof window.authManager.showMainApp === 'function') {
+                            window.authManager.showMainApp();
+                        } else {
+                            showUserInfoFallback(existingGuest);
+                        }
+                        alert(`✅ Welcome back, ${existingGuest.name}!`);
+                    } else {
+                        // New user - show registration modal
+                        console.log('📝 New phone number, showing registration modal');
+                        showRegistrationModal(phone);
+                    }
+                }).catch(error => {
+                    console.error('Error during phone lookup:', error);
+                    alert('❌ Error checking phone number. Please try again.');
+                });
+            } else {
+                // Fallback method using localStorage
+                const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+                const cleanPhone = phone.replace(/\s+/g, '').replace(/[-()]/g, '');
+                const existingGuest = Object.values(existingUsers).find(user => {
+                    const isGuestUser = user.provider === 'guest_casual' || user.provider === 'admin_casual' || user.provider === 'guest' || user.provider === 'admin';
+                    if (!isGuestUser || !user.phone) return false;
+                    const userCleanPhone = user.phone.replace(/\s+/g, '').replace(/[-()]/g, '');
+                    return userCleanPhone === cleanPhone;
+                });
+                
+                if (existingGuest) {
+                    localStorage.setItem('currentUser', JSON.stringify(existingGuest));
+                    showUserInfoFallback(existingGuest);
+                    alert(`✅ Welcome back, ${existingGuest.name}!`);
+                } else {
+                    // New user - show registration modal
+                    showRegistrationModal(phone);
+                }
+            }
+        };
+        
+        // Show registration modal with pre-filled phone number
+        window.showRegistrationModal = function(phone) {
+            // Pre-fill the phone number in the registration modal
+            const phoneField = document.getElementById('guestPhone');
+            if (phoneField) {
+                phoneField.value = phone;
+                phoneField.readOnly = true; // Make it read-only since it's already validated
+            }
+            
+            // Clear other fields
+            const nameField = document.getElementById('guestName');
+            if (nameField) nameField.value = '';
+            
+            // Set default skill level to average (already set in HTML)
+            const skillField = document.getElementById('guestSkillLevel');
+            if (skillField) skillField.value = 'average';
+            
+            // Show the modal
+            const modal = document.getElementById('guestLoginModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                if (nameField) nameField.focus();
+            }
+        };
+        
+        function waitForSystemInitialization(guestUser) {
+            console.log('⏳ Waiting for system initialization...');
+            
+            let attempts = 0;
+            const maxAttempts = 100; // 10 seconds
+            
+            const checkSystem = () => {
+                attempts++;
+                console.log(`System check attempt ${attempts}/${maxAttempts}`);
+                
+                if (window.authManager && window.app) {
+                    console.log('✅ System ready, setting up guest user');
+                    
+                    // Set the guest user as current user
+                    window.authManager.currentUser = guestUser;
+                    
+                    // Show the main app
+                    window.authManager.showMainApp();
+                    
+                } else if (window.authManager) {
+                    console.log('✅ AuthManager ready, setting up guest user without app');
+                    
+                    // Set the guest user as current user
+                    window.authManager.currentUser = guestUser;
+                    
+                    // Show the main app
+                    window.authManager.showMainApp();
+                    
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkSystem, 100);
+                } else {
+                    console.log('❌ System not ready after waiting, using manual fallback');
+                    
+                    // Manual fallback - show user info directly
+                    showUserInfoFallback(guestUser);
+                    
+                    // Store guest user for next page load
+                    localStorage.setItem('pendingGuestUser', JSON.stringify(guestUser));
+                }
+            };
+            
+            checkSystem();
+        }
+        
+        // Fallback function to manually show user info when AuthManager isn't ready
+        function showUserInfoFallback(guestUser) {
+            console.log('📱 Using manual fallback to show user info for:', guestUser.name);
+            
+            const loginOverlay = document.getElementById('loginOverlay');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (loginOverlay) {
+                loginOverlay.style.display = 'none';
+                console.log('✅ Login overlay hidden');
+            }
+            
+            if (userInfo) {
+                userInfo.style.display = 'flex';
+                console.log('✅ User info shown');
+            }
+            
+            if (userName) {
+                userName.innerHTML = `👤 ${guestUser.name} <span style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.8em; margin-left: 5px;">GUEST</span>`;
+                console.log('✅ User name set');
+            }
+            
+            if (userAvatar && guestUser.picture) {
+                userAvatar.src = guestUser.picture;
+                console.log('✅ User avatar set');
+            }
+            
+            if (logoutBtn) {
+                // Ensure logout button has an event listener
+                logoutBtn.onclick = function() {
+                    if (confirm('Are you sure you want to logout?')) {
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        window.location.reload();
+                    }
+                };
+                console.log('✅ Logout button configured');
+            }
+            
+            alert(`✅ Welcome, ${guestUser.name}!\n\nYou're now logged in as a guest player. You can view players and signups in read-only mode.`);
+        }
+        
+        // Global function to ensure logout works for guests
+        window.ensureGuestLogout = function() {
+            console.log('🔍 Ensuring guest logout functionality...');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            
+            if (logoutBtn && userInfo && userInfo.style.display !== 'none') {
+                console.log('Setting up guest logout handler');
+                logoutBtn.onclick = function() {
+                    console.log('Guest logout clicked');
+                    if (confirm('Are you sure you want to logout?')) {
+                        console.log('Guest logout confirmed');
+                        
+                        // Try AuthManager logout first
+                        if (window.authManager && typeof window.authManager.logout === 'function') {
+                            console.log('Using AuthManager logout');
+                            window.authManager.logout();
+                        } else {
+                            console.log('Using fallback logout');
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            window.location.reload();
+                        }
+                    }
+                };
+                console.log('✅ Guest logout handler set');
+                return true;
+            } else {
+                console.log('❌ Logout button or user info not ready');
+                return false;
+            }
+        };
+        
+        // Call this function periodically to ensure logout works
+        setInterval(() => {
+            if (document.getElementById('userInfo') && document.getElementById('userInfo').style.display !== 'none') {
+                window.ensureGuestLogout();
+            }
+        }, 2000);
+        
+        // Log function availability for debugging
+        console.log('🔍 removeAllCasualPlayers available:', typeof window.removeAllCasualPlayers);
+        console.log('🔍 showGuestLogin available:', typeof window.showGuestLogin);
+        console.log('🔍 ensureGuestLogout available:', typeof window.ensureGuestLogout);
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+{
+  "members": {
+    "alex.striker@gmail.com": {
+      "id": "google_alex.striker@gmail.com",
+      "email": "alex.striker@gmail.com",
+      "name": "Alex Striker",
+      "provider": "google",
+      "skillLevel": "excellent",
+      "skillInfo": {
+        "label": "Excellent",
+        "points": 4,
+        "description": "Highly skilled player, team captain material"
+      },
+      "positions": [
+        "forward",
+        "midfielder"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T10:00:00.000Z",
+      "status": "activated",
+      "firstLoginDate": "2025-09-25T10:30:00.000Z",
+      "lastLoginDate": "2025-09-27T08:00:00.000Z",
+      "profileComplete": true,
+      "lastActive": 1758800000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Alex%20Striker&background=28a745&color=fff&bold=true"
+    },
+    "sarah.defender@gmail.com": {
+      "id": "google_sarah.defender@gmail.com",
+      "email": "sarah.defender@gmail.com",
+      "name": "Sarah Defender",
+      "provider": "google",
+      "skillLevel": "good",
+      "skillInfo": {
+        "label": "Good",
+        "points": 3,
+        "description": "Solid player, good technique"
+      },
+      "positions": [
+        "defender",
+        "any"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T11:00:00.000Z",
+      "status": "activated",
+      "firstLoginDate": "2025-09-25T11:30:00.000Z",
+      "lastLoginDate": "2025-09-26T19:00:00.000Z",
+      "profileComplete": true,
+      "lastActive": 1758700000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Sarah%20Defender&background=28a745&color=fff&bold=true"
+    },
+    "mike.goalie@gmail.com": {
+      "id": "google_mike.goalie@gmail.com",
+      "email": "mike.goalie@gmail.com",
+      "name": "Mike Goalie",
+      "provider": "google",
+      "skillLevel": "average",
+      "skillInfo": {
+        "label": "Average",
+        "points": 2,
+        "description": "Decent player, some experience"
+      },
+      "positions": [
+        "goalkeeper",
+        "defender"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T12:00:00.000Z",
+      "status": "activated",
+      "firstLoginDate": "2025-09-25T12:30:00.000Z",
+      "lastLoginDate": "2025-09-27T07:00:00.000Z",
+      "profileComplete": true,
+      "lastActive": 1758750000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Mike%20Goalie&background=28a745&color=fff&bold=true"
+    },
+    "lisa.midfielder@gmail.com": {
+      "id": "google_lisa.midfielder@gmail.com",
+      "email": "lisa.midfielder@gmail.com",
+      "name": "Lisa Midfielder",
+      "provider": "google",
+      "skillLevel": "good",
+      "skillInfo": {
+        "label": "Good",
+        "points": 3,
+        "description": "Solid player, good technique"
+      },
+      "positions": [
+        "midfielder",
+        "forward"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T13:00:00.000Z",
+      "status": "activated",
+      "firstLoginDate": "2025-09-25T13:30:00.000Z",
+      "lastLoginDate": "2025-09-26T20:00:00.000Z",
+      "profileComplete": true,
+      "lastActive": 1758720000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Lisa%20Midfielder&background=28a745&color=fff&bold=true"
+    },
+    "tom.utility@gmail.com": {
+      "id": "google_tom.utility@gmail.com",
+      "email": "tom.utility@gmail.com",
+      "name": "Tom Utility",
+      "provider": "google",
+      "skillLevel": "beginner",
+      "skillInfo": {
+        "label": "Beginner",
+        "points": 1,
+        "description": "New to the game, eager to learn"
+      },
+      "positions": [
+        "any"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T14:00:00.000Z",
+      "status": "not_activated",
+      "firstLoginDate": null,
+      "lastLoginDate": null,
+      "profileComplete": false,
+      "lastActive": null,
+      "isProfileComplete": false,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Tom%20Utility&background=28a745&color=fff&bold=true"
+    },
+    "emma.winger@gmail.com": {
+      "id": "google_emma.winger@gmail.com",
+      "email": "emma.winger@gmail.com",
+      "name": "Emma Winger",
+      "provider": "google",
+      "skillLevel": "excellent",
+      "skillInfo": {
+        "label": "Excellent",
+        "points": 4,
+        "description": "Highly skilled player, team captain material"
+      },
+      "positions": [
+        "forward",
+        "midfielder"
+      ],
+      "addedBy": "admin_001",
+      "dateAdded": "2025-09-25T15:00:00.000Z",
+      "status": "not_activated",
+      "firstLoginDate": null,
+      "lastLoginDate": null,
+      "profileComplete": false,
+      "lastActive": null,
+      "isProfileComplete": false,
+      "sessionActive": false,
+      "picture": "https://ui-avatars.com/api/?name=Emma%20Winger&background=28a745&color=fff&bold=true"
+    }
+  },
+  "users": {
+    "google_alex.striker@gmail.com": {
+      "id": "google_alex.striker@gmail.com",
+      "googleId": "google_alex.striker@gmail.com",
+      "name": "Alex Striker",
+      "email": "alex.striker@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/test-alex-photo=s96-c",
+      "provider": "google",
+      "skillLevel": "excellent",
+      "skillInfo": {
+        "label": "Excellent",
+        "points": 4,
+        "description": "Highly skilled player, team captain material"
+      },
+      "positions": [
+        "forward",
+        "midfielder"
+      ],
+      "lastActive": 1758800000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "loggedOut": true,
+      "lastLogout": 1758800100000
+    },
+    "google_sarah.defender@gmail.com": {
+      "id": "google_sarah.defender@gmail.com",
+      "googleId": "google_sarah.defender@gmail.com",
+      "name": "Sarah Defender",
+      "email": "sarah.defender@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/test-sarah-photo=s96-c",
+      "provider": "google",
+      "skillLevel": "good",
+      "skillInfo": {
+        "label": "Good",
+        "points": 3,
+        "description": "Solid player, good technique"
+      },
+      "positions": [
+        "defender",
+        "any"
+      ],
+      "lastActive": 1758700000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "loggedOut": true,
+      "lastLogout": 1758700100000
+    },
+    "google_mike.goalie@gmail.com": {
+      "id": "google_mike.goalie@gmail.com",
+      "googleId": "google_mike.goalie@gmail.com",
+      "name": "Mike Goalie",
+      "email": "mike.goalie@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/test-mike-photo=s96-c",
+      "provider": "google",
+      "skillLevel": "average",
+      "skillInfo": {
+        "label": "Average",
+        "points": 2,
+        "description": "Decent player, some experience"
+      },
+      "positions": [
+        "goalkeeper",
+        "defender"
+      ],
+      "lastActive": 1758750000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "loggedOut": true,
+      "lastLogout": 1758750100000
+    },
+    "google_lisa.midfielder@gmail.com": {
+      "id": "google_lisa.midfielder@gmail.com",
+      "googleId": "google_lisa.midfielder@gmail.com",
+      "name": "Lisa Midfielder",
+      "email": "lisa.midfielder@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/test-lisa-photo=s96-c",
+      "provider": "google",
+      "skillLevel": "good",
+      "skillInfo": {
+        "label": "Good",
+        "points": 3,
+        "description": "Solid player, good technique"
+      },
+      "positions": [
+        "midfielder",
+        "forward"
+      ],
+      "lastActive": 1758720000000,
+      "isProfileComplete": true,
+      "sessionActive": false,
+      "loggedOut": true,
+      "lastLogout": 1758720100000
+    },
+    "admin_added_casual_player_1": {
+      "id": "admin_added_casual_player_1",
+      "name": "John Casual",
+      "email": "john.casual@local.test",
+      "provider": "admin",
+      "skillLevel": "average",
+      "skillInfo": {
+        "label": "Average",
+        "points": 2,
+        "description": "Decent player, some experience"
+      },
+      "positions": [
+        "any"
+      ],
+      "picture": "https://ui-avatars.com/api/?name=John%20Casual&background=007bff&color=fff&bold=true",
+      "lastActive": 1758600000000,
+      "isProfileComplete": true
+    },
+    "admin_added_casual_player_2": {
+      "id": "admin_added_casual_player_2",
+      "name": "Maria Quick",
+      "email": "maria.quick@local.test",
+      "provider": "admin",
+      "skillLevel": "good",
+      "skillInfo": {
+        "label": "Good",
+        "points": 3,
+        "description": "Solid player, good technique"
+      },
+      "positions": [
+        "forward",
+        "midfielder"
+      ],
+      "picture": "https://ui-avatars.com/api/?name=Maria%20Quick&background=007bff&color=fff&bold=true",
+      "lastActive": 1758650000000,
+      "isProfileComplete": true
+    }
+  },
+  "signups": {
+    "2025-09-26": {
+      "alex.striker@gmail.com": {
+        "name": "Alex Striker",
+        "skillLevel": "excellent",
+        "skillInfo": {
+          "label": "Excellent",
+          "points": 4,
+          "description": "Highly skilled player, team captain material"
+        },
+        "positions": ["forward", "midfielder"],
+        "signupTime": 1758700000000
+      },
+      "sarah.defender@gmail.com": {
+        "name": "Sarah Defender",
+        "skillLevel": "good",
+        "skillInfo": {
+          "label": "Good",
+          "points": 3,
+          "description": "Solid player, good technique"
+        },
+        "positions": ["defender", "any"],
+        "signupTime": 1758701000000
+      },
+      "mike.goalie@gmail.com": {
+        "name": "Mike Goalie",
+        "skillLevel": "average",
+        "skillInfo": {
+          "label": "Average",
+          "points": 2,
+          "description": "Decent player, some experience"
+        },
+        "positions": ["goalkeeper", "defender"],
+        "signupTime": 1758702000000
+      },
+      "john.casual@local.test": {
+        "name": "John Casual",
+        "skillLevel": "average",
+        "skillInfo": {
+          "label": "Average",
+          "points": 2,
+          "description": "Decent player, some experience"
+        },
+        "positions": ["any"],
+        "signupTime": 1758703000000
+      }
+    },
+    "2025-10-03": {
+      "alex.striker@gmail.com": {
+        "name": "Alex Striker",
+        "skillLevel": "excellent",
+        "skillInfo": {
+          "label": "Excellent",
+          "points": 4,
+          "description": "Highly skilled player, team captain material"
+        },
+        "positions": ["forward", "midfielder"],
+        "signupTime": 1758800000000
+      },
+      "lisa.midfielder@gmail.com": {
+        "name": "Lisa Midfielder",
+        "skillLevel": "good",
+        "skillInfo": {
+          "label": "Good",
+          "points": 3,
+          "description": "Solid player, good technique"
+        },
+        "positions": ["midfielder", "forward"],
+        "signupTime": 1758801000000
+      },
+      "maria.quick@local.test": {
+        "name": "Maria Quick",
+        "skillLevel": "good",
+        "skillInfo": {
+          "label": "Good",
+          "points": 3,
+          "description": "Solid player, good technique"
+        },
+        "positions": ["forward", "midfielder"],
+        "signupTime": 1758802000000
+      }
+    }
+  }
+}
