@@ -1,27 +1,35 @@
 // netlify/functions/users.js
-const fs = require('fs');
-const path = require('path');
 
-// Simple file-based storage (for small apps)
-const USERS_FILE = '/tmp/users.json';
+// For now, we'll use a simple in-memory storage
+// In production, you'd want to use a proper database like Fauna, Supabase, or Firebase
 
-// Initialize users file if it doesn't exist
-function initializeUsersFile() {
-  if (!fs.existsSync(USERS_FILE)) {
-    fs.writeFileSync(USERS_FILE, JSON.stringify({}));
+let usersData = {};
+
+// Initialize with some default data if empty
+function initializeUsersData() {
+  if (Object.keys(usersData).length === 0) {
+    // Load from your existing users.json data structure
+    usersData = {
+      "google_donghoangngoc@gmail.com": {
+        "id": "google_donghoangngoc@gmail.com",
+        "googleId": "google_donghoangngoc@gmail.com",
+        "email": "donghoangngoc@gmail.com",
+        "picture": "https://lh3.googleusercontent.com/a/ACg8ocI6QO5j7RqypSUUHw6A_NXzG-FtqrMEF64I9uOzDgUvOGQSGijF=s96-c",
+        "provider": "google",
+        "lastActive": Date.now(),
+        "isProfileComplete": true,
+        "name": "Dong Hoang",
+        "skillLevel": "average",
+        "skillInfo": {
+          "label": "Average",
+          "points": 2,
+          "description": "Decent player, some experience"
+        },
+        "positions": ["any"],
+        "sessionActive": false
+      }
+    };
   }
-}
-
-// Read users from file
-function readUsers() {
-  initializeUsersFile();
-  const data = fs.readFileSync(USERS_FILE, 'utf8');
-  return JSON.parse(data);
-}
-
-// Write users to file
-function writeUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
 
 exports.handler = async (event, context) => {
@@ -39,25 +47,22 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    initializeUsersData();
     const method = event.httpMethod;
-    const path = event.path;
 
     switch (method) {
       case 'GET':
         // Get all users
-        const users = readUsers();
         return {
           statusCode: 200,
           headers,
-          body: JSON.stringify(users)
+          body: JSON.stringify(usersData)
         };
 
       case 'POST':
         // Add/update user
         const newUser = JSON.parse(event.body);
-        const allUsers = readUsers();
-        allUsers[newUser.id] = newUser;
-        writeUsers(allUsers);
+        usersData[newUser.id] = newUser;
         
         return {
           statusCode: 200,
@@ -78,14 +83,12 @@ exports.handler = async (event, context) => {
           };
         }
 
-        const users = readUsers();
-        if (users[userId]) {
-          users[userId] = { ...users[userId], ...userData };
-          writeUsers(users);
+        if (usersData[userId]) {
+          usersData[userId] = { ...usersData[userId], ...userData };
           return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(users[userId])
+            body: JSON.stringify(usersData[userId])
           };
         } else {
           return {
@@ -107,9 +110,7 @@ exports.handler = async (event, context) => {
           };
         }
 
-        const usersToUpdate = readUsers();
-        delete usersToUpdate[deleteUserId];
-        writeUsers(usersToUpdate);
+        delete usersData[deleteUserId];
         
         return {
           statusCode: 200,

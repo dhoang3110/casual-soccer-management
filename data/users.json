@@ -94,14 +94,12 @@
     "lastLogout": 1759241605879
   },
   "google_dong@guest.local": {
-    "id": "google_dong@guest.local",
-    "googleId": "google_dong@guest.local",
-    "email": "dong@guest.local",
-    "picture": "https://ui-avatars.com/api/?name=dong&background=28a745&color=fff&bold=true",
-    "provider": "guest_casual",
-    "lastActive": 1759293163744,
-    "isProfileComplete": true,
+    "id": "guest_1759295801736_k421vizuk",
     "name": "dong",
+    "email": "dong@guest.local",
+    "phone": "1234567890",
+    "provider": "guest_casual",
+    "role": "player",
     "skillLevel": "average",
     "skillInfo": {
       "label": "Average",
@@ -111,15 +109,17 @@
     "positions": [
       "any"
     ],
-    "phone": "1234567890",
     "addedBy": "self",
-    "dateAdded": "2025-10-01T04:04:38.359Z",
+    "dateAdded": "2025-10-01T05:16:41.736Z",
     "status": "activated",
-    "firstLoginDate": "2025-10-01T04:04:38.359Z",
+    "firstLoginDate": "2025-10-01T05:16:41.736Z",
+    "lastLoginDate": "2025-10-01T05:16:41.736Z",
     "profileComplete": true,
-    "sessionActive": false,
-    "loggedOut": true,
-    "lastLogout": 1759293163735
+    "lastActive": 1759295801751,
+    "isProfileComplete": true,
+    "sessionActive": true,
+    "loggedOut": false,
+    "picture": "https://ui-avatars.com/api/?name=dong&background=28a745&color=fff&bold=true"
   },
   "google_regsgsd@guest.local": {
     "id": "google_regsgsd@guest.local",
