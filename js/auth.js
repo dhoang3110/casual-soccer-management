@@ -58,17 +58,22 @@ class AuthManager {
             // Show configuration help
             console.log('\n=== Google Cloud Console Configuration ===');
             console.log('Current URL:', window.location.origin);
-            console.log('Add these to Authorized JavaScript Origins:');
+            console.log('📋 Add these to Authorized JavaScript Origins:');
+            console.log('- https://sundaysoccer.netlify.app');
             console.log('- http://localhost:8000');
             console.log('- http://127.0.0.1:8000');
             console.log('- ' + window.location.origin);
-            console.log('\nAdd these to Authorized Redirect URIs:');
+            console.log('\n📋 Add these to Authorized Redirect URIs:');
+            console.log('- https://sundaysoccer.netlify.app');
+            console.log('- https://sundaysoccer.netlify.app/');
             console.log('- http://localhost:8000');
-            console.log('- http://127.0.0.1:8000');
-            console.log('- ' + window.location.origin);
             console.log('- http://localhost:8000/');
+            console.log('- http://127.0.0.1:8000');
             console.log('- http://127.0.0.1:8000/');
+            console.log('- ' + window.location.origin);
             console.log('- ' + window.location.origin + '/');
+            console.log('\n🔗 Google Cloud Console: https://console.cloud.google.com/apis/credentials');
+            console.log('Client ID: 660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj');
         }, 2000);
     }
 
