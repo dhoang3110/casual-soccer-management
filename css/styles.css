@@ -538,6 +538,14 @@ body {
     color: #495057;
 }
 
+/* Teams grid layout - default desktop */
+.teams-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -568,6 +576,22 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+    
+    /* Hide status text on mobile, show only icons */
+    .status-text-mobile-hide {
+        display: none !important;
+    }
+    
+    /* Hide position text on mobile */
+    .position-text-mobile-hide {
+        display: none !important;
+    }
+    
+    /* Mobile teams layout - stack vertically */
+    .teams-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
     }
 }
 

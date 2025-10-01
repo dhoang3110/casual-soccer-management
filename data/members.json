@@ -1,8 +1,8 @@
 {
-  "donghoangngoc@gmail.com": {
-    "id": "google_donghoangngoc@gmail.com",
-    "email": "donghoangngoc@gmail.com",
-    "name": "donghoangngoc",
+  "hoangngocdong@gmail.com": {
+    "id": "google_hoangngocdong@gmail.com",
+    "email": "hoangngocdong@gmail.com",
+    "name": "Dong Hoang",
     "provider": "google",
     "skillLevel": "average",
     "skillInfo": {
@@ -14,14 +14,14 @@
       "any"
     ],
     "addedBy": "admin_001",
-    "dateAdded": "2025-09-28T14:22:45.460Z",
+    "dateAdded": "2025-09-30T14:13:54.926Z",
     "status": "activated",
-    "firstLoginDate": "2025-09-28T14:23:52.828Z",
-    "lastLoginDate": "2025-09-28T14:23:52.828Z",
+    "firstLoginDate": "2025-09-30T14:14:30.805Z",
+    "lastLoginDate": "2025-09-30T14:14:30.805Z",
     "profileComplete": true,
-    "lastActive": 1759069432828,
+    "lastActive": 1759241670805,
     "isProfileComplete": true,
     "sessionActive": false,
-    "picture": "https://ui-avatars.com/api/?name=donghoangngoc&background=28a745&color=fff&bold=true"
+    "picture": "https://ui-avatars.com/api/?name=Dong%20Hoang&background=28a745&color=fff&bold=true"
   }
 }

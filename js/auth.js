@@ -5,14 +5,7 @@ class AuthManager {
         this.authCallbacks = [];
         this.registeredUsers = {};
         this.dataSync = window.dataSync;
-        
-        // Use environment-aware logging
-        if (window.ENV_UTILS) {
-            window.ENV_UTILS.log('AuthManager: dataSync service available:', !!this.dataSync);
-        } else {
-            console.log('AuthManager: dataSync service available:', !!this.dataSync);
-        }
-        
+        console.log('AuthManager: dataSync service available:', !!this.dataSync);
         this.init().catch(error => {
             console.error('AuthManager initialization error:', error);
         });
@@ -88,9 +81,7 @@ class AuthManager {
             const useConfigurationId = false; // Set to true to use Configuration ID
             
             // Get Facebook App ID from environment configuration
-            const facebookAppId = window.APP_CONFIG ? 
-                window.APP_CONFIG.AUTH.FACEBOOK_APP_ID : 
-                '799762102527678'; // Fallback
+            const facebookAppId = '799762102527678'; // Simple hardcoded value
             
             if (useConfigurationId) {
                 // Method 1: Using Configuration ID (newer approach)
@@ -102,15 +93,8 @@ class AuthManager {
                 });
                 
                 // Store configuration ID for login
-                this.facebookConfigId = window.APP_CONFIG ? 
-                    window.APP_CONFIG.AUTH.FACEBOOK_CONFIG_ID : 
-                    '787457504132502'; // Fallback
-                    
-                if (window.ENV_UTILS) {
-                    window.ENV_UTILS.log('Facebook SDK initialized with Configuration ID:', this.facebookConfigId);
-                } else {
-                    console.log('Facebook SDK initialized with Configuration ID:', this.facebookConfigId);
-                }
+                this.facebookConfigId = '787457504132502'; // Replace with actual Configuration ID
+                console.log('Facebook SDK initialized with Configuration ID:', this.facebookConfigId);
             } else {
                 // Method 2: Traditional App ID approach
                 FB.init({
@@ -119,12 +103,7 @@ class AuthManager {
                     xfbml: true,
                     version: 'v19.0'
                 });
-                
-                if (window.ENV_UTILS) {
-                    window.ENV_UTILS.log('Facebook SDK initialized with App ID:', facebookAppId);
-                } else {
-                    console.log('Facebook SDK initialized with App ID');
-                }
+                console.log('Facebook SDK initialized with App ID');
             }
             
             // Check login status
@@ -164,22 +143,12 @@ class AuthManager {
             
             // Pre-initialize the OAuth2 client for better reliability
             try {
-                // Get client ID from environment configuration
-                const clientId = window.APP_CONFIG ? 
-                    window.APP_CONFIG.AUTH.GOOGLE_CLIENT_ID : 
-                    '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com'; // Fallback
-                
                 this.googleTokenClient = google.accounts.oauth2.initTokenClient({
-                    client_id: clientId,
+                    client_id: '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com',
                     scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
                     callback: '', // Will be set when login is called
                 });
-                
-                if (window.ENV_UTILS) {
-                    window.ENV_UTILS.log('Google OAuth2 client pre-initialized with client ID:', clientId);
-                } else {
-                    console.log('Google OAuth2 client pre-initialized');
-                }
+                console.log('Google OAuth2 client pre-initialized');
             } catch (error) {
                 console.error('Error pre-initializing Google OAuth2 client:', error);
             }
@@ -332,13 +301,8 @@ class AuthManager {
             try {
                 console.log('Initializing Google OAuth2 popup (fallback)...');
                 
-                // Get client ID from environment configuration
-                const clientId = window.APP_CONFIG ? 
-                    window.APP_CONFIG.AUTH.GOOGLE_CLIENT_ID : 
-                    '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com'; // Fallback
-                
                 const tokenClient = google.accounts.oauth2.initTokenClient({
-                    client_id: clientId,
+                    client_id: '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com',
                     scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
                     callback: (tokenResponse) => {
                         console.log('Token response received (fallback):', tokenResponse);
@@ -1154,6 +1118,7 @@ class AuthManager {
         const userInfo = document.getElementById('userInfo');
         const userName = document.getElementById('userName');
         const userAvatar = document.getElementById('userAvatar');
+        const userPhone = document.getElementById('userPhone');
 
         if (loginOverlay) {
             loginOverlay.style.display = 'none';
@@ -1174,6 +1139,14 @@ class AuthManager {
             }
         }
         if (userAvatar) userAvatar.src = this.currentUser.picture;
+        
+        // Show phone number if available
+        if (userPhone && this.currentUser.phone) {
+            userPhone.textContent = `📱 ${this.currentUser.phone}`;
+            userPhone.style.display = 'block';
+        } else if (userPhone) {
+            userPhone.style.display = 'none';
+        }
         
         // Apply role-based access control
         this.applyRoleBasedAccess();

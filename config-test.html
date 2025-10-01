@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Configuration Test</title>
+</head>
+<body>
+    <h1>Configuration Test</h1>
+    <div id="results"></div>
+    
+    <script src=".env.js"></script>
+    <script src="js/config/appConfig.js"></script>
+    <script>
+        setTimeout(() => {
+            const results = document.getElementById('results');
+            let html = '<h2>Configuration Status:</h2>';
+            
+            html += '<p><strong>ENV_CONFIG loaded:</strong> ' + (window.ENV_CONFIG ? '✅ Yes' : '❌ No') + '</p>';
+            html += '<p><strong>APP_CONFIG loaded:</strong> ' + (window.APP_CONFIG ? '✅ Yes' : '❌ No') + '</p>';
+            
+            if (window.APP_CONFIG) {
+                html += '<p><strong>Environment:</strong> ' + window.APP_CONFIG.ENVIRONMENT + '</p>';
+                html += '<p><strong>Google Client ID:</strong> ' + (window.APP_CONFIG.AUTH?.GOOGLE_CLIENT_ID || 'Not found') + '</p>';
+                html += '<p><strong>Facebook App ID:</strong> ' + (window.APP_CONFIG.AUTH?.FACEBOOK_APP_ID || 'Not found') + '</p>';
+            }
+            
+            if (window.ENV_CONFIG) {
+                html += '<h3>ENV_CONFIG contents:</h3>';
+                html += '<pre>' + JSON.stringify(window.ENV_CONFIG, null, 2) + '</pre>';
+            }
+            
+            if (window.APP_CONFIG) {
+                html += '<h3>APP_CONFIG.AUTH contents:</h3>';
+                html += '<pre>' + JSON.stringify(window.APP_CONFIG.AUTH, null, 2) + '</pre>';
+            }
+            
+            results.innerHTML = html;
+        }, 200);
+    </script>
+</body>
+</html>

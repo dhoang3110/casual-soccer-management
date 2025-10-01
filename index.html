@@ -88,7 +88,7 @@
                 
                 <div class="form-group">
                     <label for="guestPositions" style="display: block; margin-bottom: 5px; font-weight: bold;">Preferred Positions *</label>
-                    <p style="font-size: 0.8em; color: #6c757d; margin-bottom: 8px;">Hold Ctrl/Cmd to select multiple positions</p>
+                    <p style="font-size: 0.8em; color: #6c757d; margin-bottom: 8px;">Select max 2 positions, or choose "Any Position" only</p>
                     <select id="guestPositions" multiple required size="5" 
                             style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                         <option value="goalkeeper">🥅 Goalkeeper</option>
@@ -149,7 +149,10 @@
                 </div>
                 <div id="userInfo" class="user-info" style="display: none;">
                     <img id="userAvatar" class="user-avatar" src="" alt="User Avatar">
-                    <span id="userName">User Name</span>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span id="userName">User Name</span>
+                        <span id="userPhone" style="font-size: 0.8em; color: #6c757d; margin-top: 2px; display: none;">📱 Phone</span>
+                    </div>
                     <button id="logoutBtn" class="logout-btn">Logout</button>
                 </div>
             </div>
@@ -223,7 +226,7 @@
                                 </select>
                             </div>
                             <div class="form-group" style="margin: 0;">
-                                <label for="playerPosition">Positions (Hold Ctrl/Cmd for multiple)</label>
+                                <label for="playerPosition">Positions (Max 2, or "Any Position" only)</label>
                                 <select id="playerPosition" multiple size="5" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; min-width: 150px;">
                                     <option value="goalkeeper">🥅 Goalkeeper</option>
                                     <option value="defender">🛡️ Defender</option>
@@ -298,7 +301,7 @@
                                 </select>
                             </div>
                             <div class="form-group" style="margin: 0; min-width: 150px;">
-                                <label for="memberPosition">Positions (Hold Ctrl/Cmd for multiple)</label>
+                                <label for="memberPosition">Positions (Max 2, or "Any Position" only)</label>
                                 <select id="memberPosition" multiple size="5" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                     <option value="goalkeeper">🥅 Goalkeeper</option>
                                     <option value="defender">🛡️ Defender</option>
@@ -441,15 +444,11 @@
     </div>
 
     <!-- Scripts -->
-    <!-- Environment Configuration (must load first) -->
-    <script src=".env.js"></script>
-    <script src="js/config/appConfig.js"></script>
-    
     <!-- Application Scripts -->
     <script src="js/sharedUtils.js?v=1727519600"></script>
     <script src="js/dataSync.js?v=1727519328"></script>
-    <script src="js/auth.js?v=1727519500"></script>
-    <script src="js/app.js?v=1759061500"></script>
+    <script src="js/auth.js?v=1727521000"></script>
+    <script src="js/app.js?v=1759068002"></script>
     
     <!-- Ensure removeAllCasualPlayers function is available for onclick -->
     <script>
@@ -522,6 +521,79 @@
                 });
             }
         };
+        
+        // Position selection restrictions utility
+        window.setupPositionRestrictions = function(selectId) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            select.addEventListener('change', function() {
+                handlePositionSelection(this);
+            });
+            
+            // Initial setup
+            handlePositionSelection(select);
+        };
+        
+        function handlePositionSelection(selectElement) {
+            const selectedOptions = Array.from(selectElement.selectedOptions);
+            const anyOption = selectElement.querySelector('option[value="any"]');
+            const otherOptions = Array.from(selectElement.options).filter(opt => opt.value !== 'any');
+            
+            // If "Any Position" is selected
+            if (selectedOptions.some(opt => opt.value === 'any')) {
+                // Deselect all other options
+                otherOptions.forEach(opt => opt.selected = false);
+                // Keep only "Any Position" selected
+                anyOption.selected = true;
+                return;
+            }
+            
+            // If more than 2 specific positions are selected
+            const specificSelected = selectedOptions.filter(opt => opt.value !== 'any');
+            if (specificSelected.length > 2) {
+                // Deselect the last selected option (keep first 2)
+                specificSelected[specificSelected.length - 1].selected = false;
+                
+                // Show feedback message
+                showPositionFeedback(selectElement, 'Maximum 2 positions allowed');
+                return;
+            }
+            
+            // If specific positions are selected, ensure "Any Position" is deselected
+            if (specificSelected.length > 0) {
+                anyOption.selected = false;
+            }
+            
+            // If no positions selected, default to "Any Position"
+            if (selectedOptions.length === 0) {
+                anyOption.selected = true;
+            }
+        }
+        
+        function showPositionFeedback(selectElement, message) {
+            // Remove any existing feedback
+            const existingFeedback = selectElement.parentNode.querySelector('.position-feedback');
+            if (existingFeedback) {
+                existingFeedback.remove();
+            }
+            
+            // Create feedback element
+            const feedback = document.createElement('div');
+            feedback.className = 'position-feedback';
+            feedback.style.cssText = 'color: #dc3545; font-size: 0.8em; margin-top: 4px; padding: 4px 8px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px;';
+            feedback.textContent = message;
+            
+            // Insert after select element
+            selectElement.parentNode.insertBefore(feedback, selectElement.nextSibling);
+            
+            // Remove feedback after 3 seconds
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.remove();
+                }
+            }, 3000);
+        }
         
         // Global function to handle guest form submission
         window.handleGuestFormSubmit = function(event) {
@@ -816,6 +888,7 @@
             const userInfo = document.getElementById('userInfo');
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
+            const userPhone = document.getElementById('userPhone');
             const logoutBtn = document.getElementById('logoutBtn');
 
             if (loginOverlay) {
@@ -836,6 +909,15 @@
             if (userAvatar && guestUser.picture) {
                 userAvatar.src = guestUser.picture;
                 console.log('✅ User avatar set');
+            }
+            
+            // Show phone number if available
+            if (userPhone && guestUser.phone) {
+                userPhone.textContent = `📱 ${guestUser.phone}`;
+                userPhone.style.display = 'block';
+                console.log('✅ User phone set');
+            } else if (userPhone) {
+                userPhone.style.display = 'none';
             }
             
             if (logoutBtn) {
@@ -891,12 +973,72 @@
             if (document.getElementById('userInfo') && document.getElementById('userInfo').style.display !== 'none') {
                 window.ensureGuestLogout();
             }
-        }, 2000);
+        }, 86400000); // 24 hours = 86,400,000 milliseconds
         
         // Log function availability for debugging
         console.log('🔍 removeAllCasualPlayers available:', typeof window.removeAllCasualPlayers);
         console.log('🔍 showGuestLogin available:', typeof window.showGuestLogin);
         console.log('🔍 ensureGuestLogout available:', typeof window.ensureGuestLogout);
+        
+        // Cache clearing utility function
+        window.clearBrowserCache = function() {
+            console.log('🔄 Clearing browser cache...');
+            
+            // Clear localStorage
+            try {
+                localStorage.clear();
+                console.log('✅ LocalStorage cleared');
+            } catch (e) {
+                console.warn('⚠️ Could not clear localStorage:', e);
+            }
+            
+            // Clear sessionStorage
+            try {
+                sessionStorage.clear();
+                console.log('✅ SessionStorage cleared');
+            } catch (e) {
+                console.warn('⚠️ Could not clear sessionStorage:', e);
+            }
+            
+            // Force hard reload
+            window.location.reload(true);
+        };
+        
+        // Auto-clear cache if URL has ?clearcache parameter
+        if (window.location.search.includes('clearcache')) {
+            console.log('🔄 Auto-clearing cache due to URL parameter...');
+            setTimeout(() => {
+                window.clearBrowserCache();
+            }, 1000);
+        }
+        
+        // Initialize position restrictions when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Setting up position restrictions...');
+            
+            // Setup restrictions for all position select elements
+            setTimeout(() => {
+                setupPositionRestrictions('guestPositions');
+                setupPositionRestrictions('playerPosition');
+                setupPositionRestrictions('memberPosition');
+                console.log('✅ Position restrictions initialized');
+            }, 100);
+        });
+        
+        // Fallback initialization if DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            // DOMContentLoaded will fire
+        } else {
+            // DOM is already ready
+            setTimeout(() => {
+                if (typeof setupPositionRestrictions === 'function') {
+                    setupPositionRestrictions('guestPositions');
+                    setupPositionRestrictions('playerPosition');
+                    setupPositionRestrictions('memberPosition');
+                    console.log('✅ Position restrictions initialized (fallback)');
+                }
+            }, 500);
+        }
     </script>
 </body>
 </html>

@@ -932,7 +932,7 @@ class SoccerApp {
                     ${user.actions}
                     <div class="player-info">
                         <div class="player-name">
-                            ${user.picture ? `<img src="${user.picture}" alt="${user.name}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; vertical-align: middle;">` : '👤 '}
+                            ${user.picture ? `<img src="${user.picture}" alt="${user.name}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; vertical-align: middle;">` : '❌ '}
                             ${user.name}
                             <span style="font-size: 0.7em; background: ${user.type === 'admin-added' ? '#007bff' : '#28a745'}; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">
                                 ${user.type === 'admin-added' ? 'Admin Added' : 'Self Registered'}
@@ -1087,7 +1087,9 @@ class SoccerApp {
                 picture: user.picture,
                 provider: user.provider,
                 positions: userPositions,
-                position: userPosition
+                position: userPosition,
+                phone: user.phone, // Add phone number to player data
+                email: user.email // Add email to player data
             };
             
             // Debug logging for position data
@@ -1225,29 +1227,35 @@ class SoccerApp {
             </div>
             ${sortedPlayers.map(player => {
                 const isSignedUp = signedUpIds.includes(player.id);
-                // Check if this is a casual player (guest or admin-added casual)
-                const isCasualPlayer = player.provider === 'guest_casual' || player.provider === 'admin_casual' || player.provider === 'guest' || player.provider === 'admin';
                 // For user UI, show only name (no email fallback), for admin UI show full info
                 let displayName = isAdmin ? player.name : (player.name && !player.name.includes('@') ? player.name : 'Player Name Not Set');
-                
-                // Add phone number for casual players if available
-                if (isCasualPlayer && player.phone) {
-                    displayName += ` (${player.phone})`;
-                }
                 
                 return `
                     <div class="signup-player ${isSignedUp ? 'signed-up' : 'registered-only'}" data-provider="${player.provider || 'unknown'}" style="${isSignedUp ? 'background: #f8fff9; border-left: 4px solid #28a745;' : 'background: #f8f9fa; border-left: 4px solid #dee2e6;'}">
                         <div style="display: flex; align-items: center;">
                             <div class="player-avatar" style="margin-right: 12px;">
-                                ${player.picture ? 
-                                    `<img src="${player.picture}" alt="${displayName}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${isSignedUp ? '#28a745' : '#dee2e6'}; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">` : 
-                                    `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; border: 2px solid ${isSignedUp ? '#28a745' : '#dee2e6'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${displayName.charAt(0).toUpperCase()}</div>`
-                                }
+                                ${(() => {
+                                    console.log(`Rendering avatar for ${displayName}:`, {
+                                        hasPicture: !!player.picture,
+                                        pictureUrl: player.picture,
+                                        provider: player.provider
+                                    });
+                                    
+                                    if (player.picture) {
+                                        return `<img src="${player.picture}" alt="${displayName}" 
+                                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid ${isSignedUp ? '#28a745' : '#dee2e6'}; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+                                                onerror="console.error('Failed to load profile picture for ${displayName}:', '${player.picture}'); this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                onload="console.log('✅ Profile picture loaded for ${displayName}')">
+                                                <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: none; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; border: 2px solid ${isSignedUp ? '#28a745' : '#dee2e6'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${displayName.charAt(0).toUpperCase()}</div>`;
+                                    } else {
+                                        return `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; border: 2px solid ${isSignedUp ? '#28a745' : '#dee2e6'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${displayName.charAt(0).toUpperCase()}</div>`;
+                                    }
+                                })()}
                             </div>
                             <div style="flex: 1;">
                                 <strong style="font-size: 1.1em;">${displayName}</strong>
-                                ${isSignedUp ? '<span style="color: #28a745; font-size: 0.9em; margin-left: 8px;">✅ Signed Up</span>' : 
-                                    `<span style="color: #6c757d; font-size: 0.9em; margin-left: 8px;">${
+                                ${isSignedUp ? '<span class="status-text" style="color: #28a745; font-size: 0.9em; margin-left: 8px;">✅<span class="status-text-mobile-hide"> Signed Up</span></span>' : 
+                                    `<span class="status-text" style="color: #6c757d; font-size: 0.9em; margin-left: 8px;">${
                                         (() => {
                                             console.log('Player status debug:', {
                                                 name: player.name,
@@ -1255,19 +1263,32 @@ class SoccerApp {
                                                 phone: player.phone,
                                                 id: player.id
                                             });
-                                            return player.provider === 'admin' ? 'Dong Hoang' :
-                                                   player.provider === 'google' ? 'Member' :
-                                                   (player.provider === 'guest_casual' || player.provider === 'admin_casual') && player.phone ? player.phone :
+                                            const statusText = player.provider === 'admin' ? 'Dong Hoang' :
+                                                   player.provider === 'google' ? (isSignupOpen && !isSignedUp ? '❌ Not Signup' : 'Member') :
                                                    (player.provider === 'guest_casual' || player.provider === 'admin_casual') ? 'Not Paid' : 'Waiting Vote';
+                                            
+                                            if (statusText === 'Not Paid') {
+                                                return '❌<span class="status-text-mobile-hide"> Not Paid</span>';
+                                            } else if (statusText === 'Member') {
+                                                return '❌<span class="status-text-mobile-hide"> Member</span>';
+                                            } else if (statusText === 'Not Signup') {
+                                                return '❌<span class="status-text-mobile-hide"> Not Signup</span>';
+                                            } else if (statusText === 'Waiting Vote') {
+                                                return '⏳<span class="status-text-mobile-hide"> Waiting Vote</span>';
+                                            } else {
+                                                return statusText;
+                                            }
                                         })()
                                     }</span>`}
                                 <span class="skill-badge skill-${player.skill}" style="margin-left: 10px;">${player.skill} (${player.points} pts)</span>
+                                ${player.phone ? `<div style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>` : ''}
+                                ${player.email && player.provider === 'google' ? `<div style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>` : ''}
                                 <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
                                     ${player.positions && player.positions.length > 0 ? 
-                                        `⚽ Positions: ${player.positions.join(', ')}${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}` : 
+                                        `⚽ <span class="position-text-mobile-hide">Positions: </span>${player.positions.join(', ')}${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}` : 
                                      player.position ? 
-                                        `⚽ Position: ${player.position}${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}` : 
-                                        `⚽ Position not set${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}`}
+                                        `⚽ <span class="position-text-mobile-hide">Position: </span>${player.position}${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}` : 
+                                        `⚽ <span class="position-text-mobile-hide">Position not set</span>${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}`}
                                 </div>
                             </div>
                         </div>
@@ -1285,7 +1306,7 @@ class SoccerApp {
                                         return `<div class="status-badge" style="padding: 5px 12px; font-size: 0.7em; color: #6c757d; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">CLOSED</div>`;
                                     } else {
                                         if (isSignedUp) {
-                                            return `<div class="status-badge status-in" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #28a745; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px;">✅ SIGNED UP</div>`;
+                                            return `<div class="status-badge status-in" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #28a745; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px;">✅<span class="status-text-mobile-hide"> SIGNED UP</span></div>`;
                                         } else {
                                             const statusText = (() => {
                                                 console.log('Badge status debug:', {
@@ -1299,7 +1320,8 @@ class SoccerApp {
                                                        (player.provider === 'guest_casual' || player.provider === 'admin_casual') && player.phone ? player.phone.toUpperCase() :
                                                        (player.provider === 'guest_casual' || player.provider === 'admin_casual') ? 'NOT PAID' : 'WAITING VOTE';
                                             })();
-                                            return `<div class="status-badge status-out" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #6c757d; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">${statusText}</div>`;
+                                            const icon = statusText === 'NOT PAID' ? '❌' : statusText === 'MEMBER' ? '❌' : statusText === 'WAITING VOTE' ? '⏳' : '📱';
+                                            return `<div class="status-badge status-out" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #6c757d; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">${icon}<span class="status-text-mobile-hide"> ${statusText}</span></div>`;
                                         }
                                     }
                                 }
@@ -1319,16 +1341,14 @@ class SoccerApp {
                                     const isCasualPlayer = !player.email || (player.email && player.provider === 'admin');
                                     const isMember = player.email && player.provider === 'google';
                                     
-                                    // Add appropriate delete/remove button for admin (except for current user)
+                                    // Add appropriate action button for admin (except for current user)
                                     let actionButton = '';
                                     if (!isCurrentUser) {
                                         if (isSignupOpen && isCasualPlayer) {
                                             // When signup is open, show "Remove Casual" button ONLY for casual players (no gmail account)
                                             actionButton = `<button class="remove-casual-btn" style="margin-left: 8px; padding: 5px 10px; font-size: 0.8em; background: #ffc107; color: #000; border: 1px solid #ffc107; border-radius: 4px;" onclick="app.removeCasualPlayer('${originalUserId}')" title="Remove Casual Player from System">🚫 Remove Casual</button>`;
-                                        } else if (!isSignupOpen) {
-                                            // When signup is closed, show regular delete button for all players
-                                            actionButton = `<button class="delete-btn" style="margin-left: 8px; padding: 5px 8px; font-size: 0.8em;" onclick="app.deleteUser('${originalUserId}')" title="Delete User">🗑️</button>`;
                                         }
+                                        // Removed redundant delete button since there's already one in the top right corner
                                         // Members with Gmail accounts can't be removed when signup is open (only deleted when closed)
                                     }
                                     
@@ -1353,10 +1373,11 @@ class SoccerApp {
                                 } else {
                                     // When signup is open, show current status but no interactive buttons
                                     if (isSignedUp) {
-                                        return `<div class="status-badge status-in" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #28a745; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px;">✅ SIGNED UP</div>`;
+                                        return `<div class="status-badge status-in" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #28a745; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px;">✅<span class="status-text-mobile-hide"> SIGNED UP</span></div>`;
                                     } else {
                                         const statusText = (player.provider === 'guest_casual' || player.provider === 'admin_casual') ? 'NOT PAID' : 'WAITING VOTE';
-                                        return `<div class="status-badge status-out" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #6c757d; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">${statusText}</div>`;
+                                        const icon = statusText === 'NOT PAID' ? '❌' : '⏳';
+                                        return `<div class="status-badge status-out" style="padding: 5px 15px; font-size: 0.8em; font-weight: bold; color: #6c757d; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">${icon}<span class="status-text-mobile-hide"> ${statusText}</span></div>`;
                                     }
                                 }
                             })()}
@@ -1379,21 +1400,16 @@ class SoccerApp {
         }
 
         container.innerHTML = signedUpPlayers.map(player => {
-            // Check if this is a casual player and add phone number if available
-            const isCasualPlayer = player.provider === 'guest_casual' || player.provider === 'admin_casual' || player.provider === 'guest' || player.provider === 'admin';
-            let displayName = player.name;
-            if (isCasualPlayer && player.phone) {
-                displayName += ` (${player.phone})`;
-            }
-            
             return `
             <div class="signup-player">
                 <div>
-                    ${player.picture ? `<img src="${player.picture}" alt="${displayName}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; vertical-align: middle;">` : ''}
-                    <strong>${displayName}</strong>
+                    ${player.picture ? `<img src="${player.picture}" alt="${player.name}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; vertical-align: middle;">` : ''}
+                    <strong>${player.name}</strong>
                     ${player.source === 'registered' ? '<span style="color: #28a745; font-size: 0.8em; margin-left: 5px;">👤</span>' : '<span style="color: #007bff; font-size: 0.8em; margin-left: 5px;">📝</span>'}
                     <span class="skill-badge skill-${player.skill}" style="margin-left: 10px;">${player.skill} (${player.points} pts)</span>
-                    ${player.positions && player.positions.length > 0 ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;">Positions: ${player.positions.join(', ')}</div>` : player.position ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;">Position: ${player.position}</div>` : ''}
+                    ${player.phone ? `<div style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>` : ''}
+                    ${player.email && player.provider === 'google' ? `<div style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>` : ''}
+                    ${player.positions && player.positions.length > 0 ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;"><span class="position-text-mobile-hide">Positions: </span>${player.positions.join(', ')}</div>` : player.position ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;"><span class="position-text-mobile-hide">Position: </span>${player.position}</div>` : ''}
                 </div>
                 <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8em;" onclick="app.toggleSignup('${player.id}')">Remove</button>
             </div>
@@ -1525,15 +1541,28 @@ class SoccerApp {
                     font-weight: bold;
                     color: white;
                     background: ${isSignedUp ? '#28a745' : '#6c757d'};
-                ">${isSignedUp ? '✅ Signed Up' : ((player.provider === 'guest_casual' || player.provider === 'admin_casual') ? 'Not Paid' : 'Waiting Vote')}</div>
+                ">${isSignedUp ? '✅<span class="status-text-mobile-hide"> Signed Up</span>' : ((player.provider === 'guest_casual' || player.provider === 'admin_casual') ? '❌<span class="status-text-mobile-hide"> Not Paid</span>' : '⏳<span class="status-text-mobile-hide"> Waiting Vote</span>')}</div>
                 
                 <!-- Player header -->
                 <div class="player-header" style="display: flex; align-items: center; margin-bottom: 12px;">
                     <div class="player-avatar" style="margin-right: 12px; position: relative;">
-                        ${player.picture ? 
-                            `<img src="${player.picture}" alt="${displayName}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid ${isMember ? '#28a745' : '#ffc107'}; transition: all 0.3s ease;">` :
-                            `<div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, ${isMember ? '#28a745, #20c997' : '#ffc107, #fd7e14'}); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; border: 3px solid ${isMember ? '#28a745' : '#ffc107'};">${displayName.charAt(0).toUpperCase()}</div>`
-                        }
+                        ${(() => {
+                            console.log(`Enhanced card avatar for ${displayName}:`, {
+                                hasPicture: !!player.picture,
+                                pictureUrl: player.picture,
+                                provider: player.provider
+                            });
+                            
+                            if (player.picture) {
+                                return `<img src="${player.picture}" alt="${displayName}" 
+                                        style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid ${isMember ? '#28a745' : '#ffc107'}; transition: all 0.3s ease;"
+                                        onerror="console.error('Enhanced card: Failed to load profile picture for ${displayName}:', '${player.picture}'); this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                        onload="console.log('✅ Enhanced card: Profile picture loaded for ${displayName}')">
+                                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, ${isMember ? '#28a745, #20c997' : '#ffc107, #fd7e14'}); display: none; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; border: 3px solid ${isMember ? '#28a745' : '#ffc107'};">${displayName.charAt(0).toUpperCase()}</div>`;
+                            } else {
+                                return `<div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, ${isMember ? '#28a745, #20c997' : '#ffc107, #fd7e14'}); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; border: 3px solid ${isMember ? '#28a745' : '#ffc107'};">${displayName.charAt(0).toUpperCase()}</div>`;
+                            }
+                        })()}
                         <div class="player-badge" style="
                             position: absolute;
                             top: -3px;
@@ -1572,7 +1601,7 @@ class SoccerApp {
                         `<strong style="color: #495057;">📧 Email:</strong> ${player.email || 'Not provided'}<br>` :
                         `<strong style="color: #495057;">📱 Phone:</strong> ${player.phone || 'Not provided'}<br>`
                     }
-                    <strong style="color: #495057;">⚽ Positions:</strong> ${player.positions && player.positions.length > 0 ? player.positions.join(', ') : (player.position || 'Not set')}<br>
+                    <strong style="color: #495057;">⚽ <span class="position-text-mobile-hide">Positions:</span></strong> ${player.positions && player.positions.length > 0 ? player.positions.join(', ') : (player.position || 'Not set')}<br>
                     <strong style="color: #495057;">🏆 Skill:</strong> ${player.skill || 'average'} (${player.points || '2'} pts)<br>
                     ${isMember ? 
                         `<strong style="color: #495057;">🔄 Status:</strong> ${player.status || 'active'}<br>
@@ -2421,7 +2450,7 @@ class SoccerApp {
                                 </div>
                                 <div style="color: #666; font-size: 0.9em;">📧 ${member.email}</div>
                                 ${member.skillLevel ? `<div style="margin: 5px 0;"><span class="skill-badge skill-${member.skillLevel}">${member.skillInfo ? `${member.skillInfo.label} (${member.skillInfo.points} pts)` : member.skillLevel}</span></div>` : ''}
-                                ${member.positions && member.positions.length > 0 ? `<div style="color: #666; font-size: 0.85em; margin: 3px 0;">⚽ Positions: ${member.positions.join(', ')}</div>` : member.position ? `<div style="color: #666; font-size: 0.85em; margin: 3px 0;">⚽ Position: ${member.position}</div>` : ''}
+                                ${member.positions && member.positions.length > 0 ? `<div style="color: #666; font-size: 0.85em; margin: 3px 0;">⚽ <span class="position-text-mobile-hide">Positions: </span>${member.positions.join(', ')}</div>` : member.position ? `<div style="color: #666; font-size: 0.85em; margin: 3px 0;">⚽ <span class="position-text-mobile-hide">Position: </span>${member.position}</div>` : ''}
                                 <div style="color: #999; font-size: 0.8em;">
                                     Added: ${new Date(member.dateAdded).toLocaleDateString()}
                                     ${member.status ? ` • Status: ${member.status === 'activated' ? '✅ Activated' : '⏳ Not Activated'}` : ''}
@@ -3418,7 +3447,7 @@ async function loadAndDisplayTeams() {
                     <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 0.95em;">Generated with skill balance and position distribution</p>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div class="teams-grid">
                     <div style="background: rgba(33, 150, 243, 0.3); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; border: 2px solid rgba(33, 150, 243, 0.5);">
                         <div style="display: flex; align-items: center; margin-bottom: 15px;">
                             <div style="background: #2196f3; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 1.2em; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">A</div>
@@ -3493,7 +3522,7 @@ async function loadAndDisplayTeams() {
                         <strong>⚖️ Skill Balance: ${Math.abs(teams.teamA.totalPoints - teams.teamB.totalPoints)} point${Math.abs(teams.teamA.totalPoints - teams.teamB.totalPoints) !== 1 ? 's' : ''} difference</strong>
                     </div>
                     <div style="color: rgba(255,255,255,0.9); font-size: 0.95em; margin-bottom: 10px;">
-                        <strong>🏟️ Position Balance:</strong> 
+                        <strong>🏟️ <span class="position-text-mobile-hide">Position </span>Balance:</strong> 
                         ${Object.keys({...teamAPositions, ...teamBPositions}).map(pos => {
                             const teamACount = teamAPositions[pos] || 0;
                             const teamBCount = teamBPositions[pos] || 0;

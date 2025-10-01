@@ -133,10 +133,27 @@ window.APP_CONFIG = {
         AUTO_SAVE_INTERVAL: 30000
     },
 
-    // Google OAuth
-    OAUTH: {
-        GOOGLE_CLIENT_ID: 'your-google-client-id',
-        SCOPES: ['profile', 'email']
+    // Authentication Configuration
+    AUTH: {
+        // Get Google Client ID from environment config or use fallback
+        GOOGLE_CLIENT_ID: (function() {
+            const envUrls = getEnvironmentUrls(ENVIRONMENT);
+            return envUrls.GOOGLE_CLIENT_ID || '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com';
+        })(),
+        
+        // Get Facebook App ID from environment config or use fallback
+        FACEBOOK_APP_ID: (function() {
+            const envUrls = getEnvironmentUrls(ENVIRONMENT);
+            return envUrls.FACEBOOK_APP_ID || '799762102527678';
+        })(),
+        
+        // Get Facebook Config ID from environment config
+        FACEBOOK_CONFIG_ID: (function() {
+            const envUrls = getEnvironmentUrls(ENVIRONMENT);
+            return envUrls.FACEBOOK_CONFIG_ID || '787457504132502';
+        })(),
+        
+        SCOPES: ['profile', 'email', 'openid']
     },
 
     // File paths (environment-aware)

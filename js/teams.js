@@ -286,14 +286,20 @@ class TeamGenerator {
                         ).join('')}
                     </div>
                     <div class="team-players">
-                        ${team.players.map(player => `
+                        ${team.players.map(player => {
+                            const isCasualPlayer = player.provider === 'guest_casual' || player.provider === 'admin_casual' || player.provider === 'guest' || player.provider === 'admin';
+                            const isGoogleMember = player.provider === 'google' && player.email;
+                            const displayName = player.name + (isCasualPlayer && player.phone ? ` (${player.phone})` : '') + (isGoogleMember ? ` (${player.email})` : '');
+                            return `
                             <div class="team-player">
                                 <div>
-                                    <strong>${player.name}</strong>
+                                    <strong>${displayName}</strong>
+                                    ${player.phone && isCasualPlayer ? `<div style="font-size: 0.8em; color: #007bff; margin-top: 2px;">📱 ${player.phone}</div>` : ''}
+                                    ${player.email && isGoogleMember ? `<div style="font-size: 0.8em; color: #28a745; margin-top: 2px;">📧 ${player.email}</div>` : ''}
                                 </div>
                                 <span class="skill-badge skill-${player.skill}">${player.skill}</span>
                             </div>
-                        `).join('')}
+                        `;}).join('')}
                     </div>
                 </div>
             `;

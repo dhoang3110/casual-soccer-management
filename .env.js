@@ -17,21 +17,29 @@ window.ENV_CONFIG = {
         API_BASE: 'https://your-soccer-app.netlify.app',
         
         // Google OAuth Client ID for production - GET FROM GOOGLE CONSOLE
-        GOOGLE_CLIENT_ID: 'your-production-google-client-id.apps.googleusercontent.com'
+        GOOGLE_CLIENT_ID: 'your-production-google-client-id.apps.googleusercontent.com',
+        
+        // Facebook App ID for production - GET FROM FACEBOOK DEVELOPER CONSOLE
+        FACEBOOK_APP_ID: 'your-production-facebook-app-id',
+        FACEBOOK_CONFIG_ID: 'your-production-facebook-config-id'
     },
 
     // 🧪 TESTING/STAGING SETTINGS (optional)
     TESTING: {
         DOMAIN: 'https://staging-soccer-app.netlify.app',
         API_BASE: 'https://staging-soccer-app.netlify.app',
-        GOOGLE_CLIENT_ID: 'your-testing-google-client-id.apps.googleusercontent.com'
+        GOOGLE_CLIENT_ID: 'your-testing-google-client-id.apps.googleusercontent.com',
+        FACEBOOK_APP_ID: 'your-testing-facebook-app-id',
+        FACEBOOK_CONFIG_ID: 'your-testing-facebook-config-id'
     },
 
     // 💻 DEVELOPMENT SETTINGS (for local development)
     DEVELOPMENT: {
         DOMAIN: 'http://localhost',
         API_BASE: 'http://localhost:3000',
-        GOOGLE_CLIENT_ID: 'your-development-google-client-id.apps.googleusercontent.com'
+        GOOGLE_CLIENT_ID: '660296369599-2t5u6qmve8q8tpkoh4o9uau9i6e4pmbj.apps.googleusercontent.com',
+        FACEBOOK_APP_ID: '799762102527678',
+        FACEBOOK_CONFIG_ID: '787457504132502'
     },
 
     // 🎛️ FEATURE TOGGLES
