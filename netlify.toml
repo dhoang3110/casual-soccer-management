@@ -5,12 +5,21 @@
   # The directory to publish (current directory since it's a static site)
   publish = "."
   
+  # Functions directory
+  functions = "netlify/functions"
+  
   # Command to run before deployment (if needed)
   # command = "echo 'Building Soccer Team Manager...'"
 
-# Redirect rules
+# Redirect rules - ORDER MATTERS!
 [[redirects]]
-  # Handle client-side routing - redirect all requests to index.html
+  # API routes to Netlify Functions (must come BEFORE the catch-all)
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  # Handle client-side routing - redirect all OTHER requests to index.html
   from = "/*"
   to = "/index.html"
   status = 200
@@ -28,6 +37,14 @@
     
     # Performance headers
     Cache-Control = "public, max-age=3600"
+
+# Special headers for functions
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
 
 # Special headers for static assets
 [[headers]]
