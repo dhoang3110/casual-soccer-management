@@ -1,0 +1,28 @@
+{
+  "example@gmail.com": {
+    "id": "google_example@gmail.com",
+    "email": "example@gmail.com",
+    "name": "Example User",
+    "provider": "google",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "midfielder"
+    ],
+    "addedBy": "admin_001",
+    "dateAdded": "2025-10-01T10:00:00.000Z",
+    "status": "not_activated",
+    "firstLoginDate": null,
+    "lastLoginDate": null,
+    "profileComplete": false,
+    "lastActive": null,
+    "isProfileComplete": false,
+    "sessionActive": false,
+    "loggedOut": true,
+    "picture": null
+  }
+}

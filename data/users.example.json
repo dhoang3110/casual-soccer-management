@@ -1,0 +1,30 @@
+{
+  "example_user_id": {
+    "id": "example_user_id",
+    "name": "Example User",
+    "email": "example@example.com",
+    "phone": "1234567890",
+    "provider": "guest_casual",
+    "role": "player",
+    "skillLevel": "average",
+    "skillInfo": {
+      "label": "Average",
+      "points": 2,
+      "description": "Decent player, some experience"
+    },
+    "positions": [
+      "any"
+    ],
+    "addedBy": "self",
+    "dateAdded": "2025-10-01T10:00:00.000Z",
+    "status": "activated",
+    "firstLoginDate": "2025-10-01T10:00:00.000Z",
+    "lastLoginDate": "2025-10-01T10:00:00.000Z",
+    "profileComplete": true,
+    "lastActive": 1727521000000,
+    "isProfileComplete": true,
+    "sessionActive": false,
+    "loggedOut": true,
+    "picture": "https://ui-avatars.com/api/?name=Example%20User&background=28a745&color=fff&bold=true"
+  }
+}

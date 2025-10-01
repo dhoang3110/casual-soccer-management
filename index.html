@@ -400,42 +400,42 @@
 
     <!-- Membership Payment Modal -->
     <div id="membershipModal" class="login-overlay" style="display: none;">
-        <div class="login-modal">
-            <div class="modal-header">
-                <h2>💳 Membership Required</h2>
-                <p>Access to this system requires membership approval.</p>
+        <div class="login-modal" style="max-width: 380px; padding: 25px;">
+            <div class="modal-header" style="margin-bottom: 15px;">
+                <h2 style="font-size: 1.4em; margin-bottom: 8px;">💳 Membership Required</h2>
+                <p style="margin-bottom: 0; font-size: 0.9em;">Access requires membership approval.</p>
             </div>
-            <div class="membership-info" style="text-align: center; padding: 20px;">
-                <div style="font-size: 3em; margin-bottom: 20px;">⚽</div>
-                <h3 style="color: #dc3545; margin-bottom: 15px;">Your email is not authorized</h3>
-                <p style="margin-bottom: 20px; color: #666;">
+            <div class="membership-info" style="text-align: center; padding: 10px 0;">
+                <div style="font-size: 1.8em; margin-bottom: 12px;">⚽</div>
+                <h3 style="color: #dc3545; margin-bottom: 10px; font-size: 1.1em;">Your email is not authorized</h3>
+                <p style="margin-bottom: 15px; color: #666; font-size: 0.85em;">
                     To gain access to the Soccer Team Management System, you need to become a member.
                 </p>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h4 style="color: #2c3e50; margin-bottom: 10px;">Membership Fee</h4>
-                    <div style="font-size: 2em; font-weight: bold; color: #007bff;">$40</div>
-                    <p style="color: #666; margin-top: 10px;">One-time payment for lifetime access</p>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 5px; font-size: 0.95em;">Membership Fee</h4>
+                    <div style="font-size: 1.4em; font-weight: bold; color: #007bff;">$40</div>
+                    <p style="color: #666; margin: 5px 0 0 0; font-size: 0.8em;">One-time payment for lifetime access</p>
                 </div>
-                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h4 style="color: #856404; margin-bottom: 10px;">💳 Payment Instructions</h4>
-                    <p style="color: #856404; margin-bottom: 10px; font-weight: bold;">
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <h4 style="color: #856404; margin-bottom: 8px; font-size: 0.9em;">💳 Payment Instructions</h4>
+                    <p style="color: #856404; margin-bottom: 8px; font-weight: bold; font-size: 0.8em;">
                         Please transfer $40 to the following bank account:
                     </p>
-                    <div style="background: #ffffff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; text-align: center;">
-                        <div style="font-size: 1.5em; font-weight: bold; color: #007bff; letter-spacing: 2px;">
+                    <div style="background: #ffffff; padding: 10px; border-radius: 6px; border: 2px solid #007bff; text-align: center;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #007bff; letter-spacing: 1px;">
                             123456
                         </div>
-                        <div style="color: #666; font-size: 0.9em; margin-top: 5px;">Bank Account Number</div>
+                        <div style="color: #666; font-size: 0.75em; margin-top: 3px;">Bank Account Number</div>
                     </div>
                 </div>
-                <p style="margin-bottom: 20px; font-size: 0.9em; color: #666;">
+                <p style="margin-bottom: 15px; font-size: 0.75em; color: #666;">
                     After making the payment, please contact the system administrator to get your email added to the authorized list.
                 </p>
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button class="btn btn-primary" onclick="contactAdmin()" style="padding: 10px 20px;">
+                <div style="display: flex; gap: 8px; justify-content: center;">
+                    <button class="btn btn-primary" onclick="contactAdmin()" style="padding: 8px 15px; font-size: 0.85em;">
                         📧 Contact Admin
                     </button>
-                    <button class="btn btn-secondary" onclick="closeMembershipModal()" style="padding: 10px 20px;">
+                    <button class="btn btn-secondary" onclick="closeMembershipModal()" style="padding: 8px 15px; font-size: 0.85em;">
                         Close
                     </button>
                 </div>

@@ -49,3 +49,11 @@ logs
 
 # Temporary HTML files
 Attached HTML and CSS Context
+
+# Data files (local development data should not be committed)
+data/
+!data/.gitkeep
+!data/README.md
+
+# Backup original data files with example templates
+!data/*.example.json

@@ -107,6 +107,8 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 400px;
     width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
 }
 
 .login-modal h2 {
@@ -1243,5 +1245,40 @@ body {
 
 .enhanced-player-container .empty-state h3 {
     color: #495057;
-    margin-bottom: 10px;
+}
+
+/* Mobile responsiveness for modals */
+@media (max-width: 768px) {
+    .login-modal {
+        padding: 20px;
+        margin: 10px;
+        width: calc(100% - 20px);
+        max-width: none;
+        max-height: 90vh;
+    }
+    
+    .login-modal h2 {
+        font-size: 1.3em;
+    }
+    
+    .login-modal p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-modal {
+        padding: 15px;
+        margin: 5px;
+        width: calc(100% - 10px);
+        border-radius: 10px;
+    }
+    
+    .login-modal h2 {
+        font-size: 1.2em;
+    }
+    
+    .modal-header {
+        margin-bottom: 15px;
+    }
 }

@@ -1,0 +1,6 @@
+{
+  "version": "2025.10.01.1000000000000",
+  "description": "Example data version for local development",
+  "lastUpdated": "2025-10-01T10:00:00.000Z",
+  "environment": "development"
+}
