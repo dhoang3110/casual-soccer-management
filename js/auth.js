@@ -7,11 +7,12 @@ class AuthManager {
         this.dataSync = window.dataSync;
         
         // Get environment configuration
+        const environment = window.getEnvironment ? window.getEnvironment() : 'development';
         this.config = window.APP_CONFIG?.ENVIRONMENT || {};
-        this.apiUrl = this.config.API_URL || '/.netlify/functions';
-        this.isProduction = window.getEnvironment() === 'netlify';
+        this.apiUrl = this.config.API_URL || (environment === 'production' ? '/.netlify/functions' : 'http://localhost:3000/api');
+        this.isProduction = environment === 'production';
         
-        console.log('AuthManager: Environment:', window.getEnvironment());
+        console.log('AuthManager: Environment:', environment);
         console.log('AuthManager: API URL:', this.apiUrl);
         console.log('AuthManager: Is Production:', this.isProduction);
         console.log('AuthManager: dataSync service available:', !!this.dataSync);
