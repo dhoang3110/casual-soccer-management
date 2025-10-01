@@ -2559,6 +2559,14 @@ function notifyMemberRemoved(removedEmail) {
     }
 }
 
+// Global wrapper functions for HTML onclick handlers
+window.saveUserProfile = saveUserProfile;
+window.hideGuestLogin = function() {
+    if (window.authManager && typeof window.authManager.hideGuestLoginModal === 'function') {
+        window.authManager.hideGuestLoginModal();
+    }
+};
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = AuthManager;

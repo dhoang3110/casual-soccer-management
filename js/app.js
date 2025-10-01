@@ -3672,6 +3672,15 @@ function toggleContactInfo(iconElement, contactValue, contactType) {
 
 // Make the function globally available
 window.toggleContactInfo = toggleContactInfo;
+window.addMember = addMember;
+window.addPlayer = addPlayer;
+window.switchTab = switchTab;
+window.toggleAdminSignup = toggleAdminSignup;
+window.resetAllData = resetAllData;
+window.importTestData = importTestData;
+window.viewTestDataInfo = viewTestDataInfo;
+window.contactAdmin = contactAdmin;
+window.closeMembershipModal = closeMembershipModal;
 
 // Duplicate removed - function now defined at top of file
 
@@ -3683,37 +3692,4 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = SoccerApp;
-}
-
-// Add this to your js/app.js initialization
-async initializeNetlifyData() {
-    try {
-        // Check if users exist
-        const users = await this.getRegisteredUsers();
-        
-        if (Object.keys(users).length === 0) {
-            // Load initial data from your existing JSON files
-            const response = await fetch('/data/users.json');
-            if (response.ok) {
-                const initialUsers = await response.json();
-                
-                // Save each user to Netlify Functions
-                for (const [userId, userData] of Object.entries(initialUsers)) {
-                    await this.saveUser(userData);
-                }
-                
-                console.log('✅ Initial user data loaded to Netlify Functions');
-            }
-        }
-    } catch (error) {
-        console.error('Error initializing data:', error);
-    }
-}
-
-// Call this during app initialization
-async init() {
-    if (window.getEnvironment() === 'netlify') {
-        await this.initializeNetlifyData();
-    }
-    // ... rest of your initialization
 }
