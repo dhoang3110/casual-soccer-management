@@ -5,7 +5,17 @@ class AuthManager {
         this.authCallbacks = [];
         this.registeredUsers = {};
         this.dataSync = window.dataSync;
+        
+        // Get environment configuration
+        this.config = window.APP_CONFIG?.ENVIRONMENT || {};
+        this.apiUrl = this.config.API_URL || '/.netlify/functions';
+        this.isProduction = window.getEnvironment() === 'netlify';
+        
+        console.log('AuthManager: Environment:', window.getEnvironment());
+        console.log('AuthManager: API URL:', this.apiUrl);
+        console.log('AuthManager: Is Production:', this.isProduction);
         console.log('AuthManager: dataSync service available:', !!this.dataSync);
+        
         this.init().catch(error => {
             console.error('AuthManager initialization error:', error);
         });
@@ -881,7 +891,7 @@ class AuthManager {
         
         // Check against server users first
         try {
-            const response = await fetch('/api/users');
+            const response = await fetch(`${this.apiUrl}/users`);
             if (response.ok) {
                 const usersObj = await response.json();
                 const users = Object.values(usersObj);
@@ -929,7 +939,7 @@ class AuthManager {
     async validateGuestName(name) {
         // Check against existing registered users
         try {
-            const response = await fetch('/api/users');
+            const response = await fetch(`${this.apiUrl}/users`);
             if (response.ok) {
                 const usersObj = await response.json();
                 const users = Object.values(usersObj);
@@ -982,7 +992,7 @@ class AuthManager {
         
         // Check against existing users in the server
         try {
-            const response = await fetch('/api/users');
+            const response = await fetch(`${this.apiUrl}/users`);
             if (response.ok) {
                 const usersObj = await response.json();
                 const users = Object.values(usersObj);
@@ -1020,7 +1030,7 @@ class AuthManager {
 
         // Also check members.json for phone numbers
         try {
-            const membersResponse = await fetch('/api/members');
+            const membersResponse = await fetch(`${this.apiUrl}/members`);
             if (membersResponse.ok) {
                 const members = await membersResponse.json();
                 const existingMember = Object.values(members).find(member => {
@@ -1082,7 +1092,7 @@ class AuthManager {
         
         // Try to save to server if available
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch(`${this.apiUrl}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1630,7 +1640,11 @@ class AuthManager {
             
             // Check if server requires a specific version (for admin-triggered resets)
             try {
-                const serverVersionResponse = await fetch('http://localhost:3000/api/config/data-version');
+                const versionUrl = this.isProduction ? 
+                    `${this.apiUrl}/config/data-version` : 
+                    `${this.apiUrl}/config/data-version`;
+                    
+                const serverVersionResponse = await fetch(versionUrl);
                 if (serverVersionResponse.ok) {
                     const serverVersionData = await serverVersionResponse.json();
                     if (serverVersionData.version && serverVersionData.requiresClear) {
@@ -1991,7 +2005,7 @@ class AuthManager {
         
         try {
             // Test direct fetch
-            const response = await fetch('http://localhost:3000/api/health');
+            const response = await fetch(`${this.apiUrl}/health`);
             const data = await response.json();
             console.log('✅ Direct fetch successful:', data);
             
@@ -2203,7 +2217,7 @@ class AuthManager {
     // Member Authorization Methods
     async checkExistingUser(email) {
         try {
-            const response = await fetch('http://localhost:3000/api/users');
+            const response = await fetch(`${this.apiUrl}/users`);
             if (response.ok) {
                 const users = await response.json();
                 const normalizedEmail = email.toLowerCase().trim();
@@ -2226,7 +2240,7 @@ class AuthManager {
 
     async checkMemberAuthorization(email) {
         try {
-            const response = await fetch('http://localhost:3000/api/members');
+            const response = await fetch(`${this.apiUrl}/members`);
             if (response.ok) {
                 const members = await response.json();
                 const normalizedEmail = email.toLowerCase().trim();
