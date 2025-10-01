@@ -294,8 +294,18 @@ class TeamGenerator {
                             <div class="team-player">
                                 <div>
                                     <strong>${displayName}</strong>
-                                    ${player.phone && isCasualPlayer ? `<div style="font-size: 0.8em; color: #007bff; margin-top: 2px;">📱 ${player.phone}</div>` : ''}
-                                    ${player.email && isGoogleMember ? `<div style="font-size: 0.8em; color: #28a745; margin-top: 2px;">📧 ${player.email}</div>` : ''}
+                                    ${player.phone && isCasualPlayer ? `
+                                        <div class="contact-info-desktop" style="font-size: 0.8em; color: #007bff; margin-top: 2px;">📱 ${player.phone}</div>
+                                        <div class="contact-info-mobile">
+                                            <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${player.phone}', 'phone')" title="Click to show phone">📱</span>
+                                        </div>
+                                    ` : ''}
+                                    ${player.email && isGoogleMember ? `
+                                        <div class="contact-info-desktop" style="font-size: 0.8em; color: #28a745; margin-top: 2px;">📧 ${player.email}</div>
+                                        <div class="contact-info-mobile">
+                                            <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${player.email}', 'email')" title="Click to show email">📧</span>
+                                        </div>
+                                    ` : ''}
                                 </div>
                                 <span class="skill-badge skill-${player.skill}">${player.skill}</span>
                             </div>

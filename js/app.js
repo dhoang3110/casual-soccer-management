@@ -1281,8 +1281,18 @@ class SoccerApp {
                                         })()
                                     }</span>`}
                                 <span class="skill-badge skill-${player.skill}" style="margin-left: 10px;">${player.skill} (${player.points} pts)</span>
-                                ${player.phone ? `<div style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>` : ''}
-                                ${player.email && player.provider === 'google' ? `<div style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>` : ''}
+                                ${player.phone ? `
+                                    <div class="contact-info-desktop" style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>
+                                    <div class="contact-info-mobile">
+                                        <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${player.phone}', 'phone')" title="Click to show phone">📱</span>
+                                    </div>
+                                ` : ''}
+                                ${player.email && player.provider === 'google' ? `
+                                    <div class="contact-info-desktop" style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>
+                                    <div class="contact-info-mobile">
+                                        <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${player.email}', 'email')" title="Click to show email">📧</span>
+                                    </div>
+                                ` : ''}
                                 <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
                                     ${player.positions && player.positions.length > 0 ? 
                                         `⚽ <span class="position-text-mobile-hide">Positions: </span>${player.positions.join(', ')}${isAdmin ? ` • 🏆 Level: ${player.skill} (${player.points} pts)` : ''}` : 
@@ -1407,8 +1417,18 @@ class SoccerApp {
                     <strong>${player.name}</strong>
                     ${player.source === 'registered' ? '<span style="color: #28a745; font-size: 0.8em; margin-left: 5px;">👤</span>' : '<span style="color: #007bff; font-size: 0.8em; margin-left: 5px;">📝</span>'}
                     <span class="skill-badge skill-${player.skill}" style="margin-left: 10px;">${player.skill} (${player.points} pts)</span>
-                    ${player.phone ? `<div style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>` : ''}
-                    ${player.email && player.provider === 'google' ? `<div style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>` : ''}
+                    ${player.phone ? `
+                        <div class="contact-info-desktop" style="font-size: 0.85em; color: #007bff; margin-top: 3px; font-weight: 500;">📱 ${player.phone}</div>
+                        <div class="contact-info-mobile">
+                            <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${player.phone}', 'phone')" title="Click to show phone">📱</span>
+                        </div>
+                    ` : ''}
+                    ${player.email && player.provider === 'google' ? `
+                        <div class="contact-info-desktop" style="font-size: 0.85em; color: #28a745; margin-top: 3px; font-weight: 500;">📧 ${player.email}</div>
+                        <div class="contact-info-mobile">
+                            <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${player.email}', 'email')" title="Click to show email">📧</span>
+                        </div>
+                    ` : ''}
                     ${player.positions && player.positions.length > 0 ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;"><span class="position-text-mobile-hide">Positions: </span>${player.positions.join(', ')}</div>` : player.position ? `<div style="font-size: 0.75em; color: #666; margin-top: 3px;"><span class="position-text-mobile-hide">Position: </span>${player.position}</div>` : ''}
                 </div>
                 <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8em;" onclick="app.toggleSignup('${player.id}')">Remove</button>
@@ -1598,8 +1618,16 @@ class SoccerApp {
                 <!-- Player details -->
                 <div class="player-details" style="font-size: 0.9em; color: #6c757d; line-height: 1.4; margin-bottom: 15px;">
                     ${isMember ? 
-                        `<strong style="color: #495057;">📧 Email:</strong> ${player.email || 'Not provided'}<br>` :
-                        `<strong style="color: #495057;">📱 Phone:</strong> ${player.phone || 'Not provided'}<br>`
+                        `<strong style="color: #495057;">📧 Email:</strong> 
+                         <span class="contact-info-desktop">${player.email || 'Not provided'}</span>
+                         <div class="contact-info-mobile">
+                             <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${player.email || ''}', 'email')" title="Click to show email">📧</span>
+                         </div><br>` :
+                        `<strong style="color: #495057;">📱 Phone:</strong> 
+                         <span class="contact-info-desktop">${player.phone || 'Not provided'}</span>
+                         <div class="contact-info-mobile">
+                             <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${player.phone || ''}', 'phone')" title="Click to show phone">📱</span>
+                         </div><br>`
                     }
                     <strong style="color: #495057;">⚽ <span class="position-text-mobile-hide">Positions:</span></strong> ${player.positions && player.positions.length > 0 ? player.positions.join(', ') : (player.position || 'Not set')}<br>
                     <strong style="color: #495057;">🏆 Skill:</strong> ${player.skill || 'average'} (${player.points || '2'} pts)<br>
@@ -2897,13 +2925,25 @@ async function toggleAdminSignup() {
                                     <ul style="margin: 8px 0 0 0; padding-left: 20px;">
                                         ${teams.teamA.players.map(p => {
                                             const isCasualPlayer = p.provider === 'guest_casual' || p.provider === 'admin_casual' || p.provider === 'guest' || p.provider === 'admin';
-                                            const displayName = isCasualPlayer && p.phone ? `${p.name} (${p.phone})` : p.name;
+                                            const isGoogleMember = p.provider === 'google' && p.email;
                                             return `<li style="display: flex; align-items: center; margin-bottom: 4px;">
                                                 ${p.picture ? 
-                                                    `<img src="${p.picture}" alt="${displayName}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; object-fit: cover; border: 1px solid #1976d2;">` : 
-                                                    `<div style="width: 20px; height: 20px; border-radius: 50%; background: #1976d2; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; margin-right: 8px;">${displayName.charAt(0).toUpperCase()}</div>`
+                                                    `<img src="${p.picture}" alt="${p.name}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; object-fit: cover; border: 1px solid #1976d2;">` : 
+                                                    `<div style="width: 20px; height: 20px; border-radius: 50%; background: #1976d2; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; margin-right: 8px;">${p.name.charAt(0).toUpperCase()}</div>`
                                                 }
-                                                <span>${displayName} (${p.points} pts)${p.positions && p.positions.length > 0 ? ` - ${p.positions.join(', ')}` : p.position ? ` - ${p.position}` : ''}</span>
+                                                <span>${p.name} (${p.points} pts)${p.positions && p.positions.length > 0 ? ` - ${p.positions.join(', ')}` : p.position ? ` - ${p.position}` : ''}</span>
+                                                ${isCasualPlayer && p.phone ? `
+                                                    <span class="contact-info-desktop" style="color: #1976d2; margin-left: 8px; font-size: 0.8em;">(${p.phone})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${p.phone}', 'phone')" title="Click to show phone">📱</span>
+                                                    </span>
+                                                ` : ''}
+                                                ${isGoogleMember ? `
+                                                    <span class="contact-info-desktop" style="color: #28a745; margin-left: 8px; font-size: 0.8em;">(${p.email})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${p.email}', 'email')" title="Click to show email">📧</span>
+                                                    </span>
+                                                ` : ''}
                                             </li>`;
                                         }).join('')}
                                     </ul>
@@ -2913,13 +2953,25 @@ async function toggleAdminSignup() {
                                     <ul style="margin: 8px 0 0 0; padding-left: 20px;">
                                         ${teams.teamB.players.map(p => {
                                             const isCasualPlayer = p.provider === 'guest_casual' || p.provider === 'admin_casual' || p.provider === 'guest' || p.provider === 'admin';
-                                            const displayName = isCasualPlayer && p.phone ? `${p.name} (${p.phone})` : p.name;
+                                            const isGoogleMember = p.provider === 'google' && p.email;
                                             return `<li style="display: flex; align-items: center; margin-bottom: 4px;">
                                                 ${p.picture ? 
-                                                    `<img src="${p.picture}" alt="${displayName}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; object-fit: cover; border: 1px solid #d32f2f;">` : 
-                                                    `<div style="width: 20px; height: 20px; border-radius: 50%; background: #d32f2f; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; margin-right: 8px;">${displayName.charAt(0).toUpperCase()}</div>`
+                                                    `<img src="${p.picture}" alt="${p.name}" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; object-fit: cover; border: 1px solid #d32f2f;">` : 
+                                                    `<div style="width: 20px; height: 20px; border-radius: 50%; background: #d32f2f; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; margin-right: 8px;">${p.name.charAt(0).toUpperCase()}</div>`
                                                 }
-                                                <span>${displayName} (${p.points} pts)${p.positions && p.positions.length > 0 ? ` - ${p.positions.join(', ')}` : p.position ? ` - ${p.position}` : ''}</span>
+                                                <span>${p.name} (${p.points} pts)${p.positions && p.positions.length > 0 ? ` - ${p.positions.join(', ')}` : p.position ? ` - ${p.position}` : ''}</span>
+                                                ${isCasualPlayer && p.phone ? `
+                                                    <span class="contact-info-desktop" style="color: #d32f2f; margin-left: 8px; font-size: 0.8em;">(${p.phone})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${p.phone}', 'phone')" title="Click to show phone">📱</span>
+                                                    </span>
+                                                ` : ''}
+                                                ${isGoogleMember ? `
+                                                    <span class="contact-info-desktop" style="color: #28a745; margin-left: 8px; font-size: 0.8em;">(${p.email})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${p.email}', 'email')" title="Click to show email">📧</span>
+                                                    </span>
+                                                ` : ''}
                                             </li>`;
                                         }).join('')}
                                     </ul>
@@ -3460,18 +3512,32 @@ async function loadAndDisplayTeams() {
                         <div style="space-y: 8px;">
                             ${teams.teamA.players.map(p => {
                                 const isCasualPlayer = p.provider === 'guest_casual' || p.provider === 'admin_casual' || p.provider === 'guest' || p.provider === 'admin';
-                                const displayName = isCasualPlayer && p.phone ? `${p.name} (${p.phone})` : p.name;
+                                const isGoogleMember = p.provider === 'google' && p.email;
                                 return `
                                 <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
                                     <div style="display: flex; align-items: center; flex: 1;">
                                         <div class="team-player-avatar" style="margin-right: 10px;">
                                             ${p.picture ? 
-                                                `<img src="${p.picture}" alt="${displayName}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">` : 
-                                                `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${displayName.charAt(0).toUpperCase()}</div>`
+                                                `<img src="${p.picture}" alt="${p.name}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">` : 
+                                                `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${p.name.charAt(0).toUpperCase()}</div>`
                                             }
                                         </div>
                                         <div>
-                                            <div style="font-weight: 500; color: white;">${displayName}</div>
+                                            <div style="font-weight: 500; color: white;">
+                                                ${p.name}
+                                                ${isCasualPlayer && p.phone ? `
+                                                    <span class="contact-info-desktop" style="color: rgba(255,255,255,0.8); margin-left: 8px; font-size: 0.8em;">(${p.phone})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${p.phone}', 'phone')" title="Click to show phone">📱</span>
+                                                    </span>
+                                                ` : ''}
+                                                ${isGoogleMember ? `
+                                                    <span class="contact-info-desktop" style="color: rgba(255,255,255,0.8); margin-left: 8px; font-size: 0.8em;">(${p.email})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${p.email}', 'email')" title="Click to show email">📧</span>
+                                                    </span>
+                                                ` : ''}
+                                            </div>
                                             ${p.positions && p.positions.length > 0 ? `<div style="font-size: 0.75em; opacity: 0.8; margin-top: 2px; color: rgba(255,255,255,0.8);">${p.positions.join(', ')}</div>` : p.position ? `<div style="font-size: 0.75em; opacity: 0.8; margin-top: 2px; color: rgba(255,255,255,0.8);">${p.position}</div>` : ''}
                                         </div>
                                     </div>
@@ -3494,18 +3560,32 @@ async function loadAndDisplayTeams() {
                         <div style="space-y: 8px;">
                             ${teams.teamB.players.map(p => {
                                 const isCasualPlayer = p.provider === 'guest_casual' || p.provider === 'admin_casual' || p.provider === 'guest' || p.provider === 'admin';
-                                const displayName = isCasualPlayer && p.phone ? `${p.name} (${p.phone})` : p.name;
+                                const isGoogleMember = p.provider === 'google' && p.email;
                                 return `
                                 <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
                                     <div style="display: flex; align-items: center; flex: 1;">
                                         <div class="team-player-avatar" style="margin-right: 10px;">
                                             ${p.picture ? 
-                                                `<img src="${p.picture}" alt="${displayName}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">` : 
-                                                `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${displayName.charAt(0).toUpperCase()}</div>`
+                                                `<img src="${p.picture}" alt="${p.name}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">` : 
+                                                `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 2px 4px rgba(0,0,0,0.2);">${p.name.charAt(0).toUpperCase()}</div>`
                                             }
                                         </div>
                                         <div>
-                                            <div style="font-weight: 500; color: white;">${displayName}</div>
+                                            <div style="font-weight: 500; color: white;">
+                                                ${p.name}
+                                                ${isCasualPlayer && p.phone ? `
+                                                    <span class="contact-info-desktop" style="color: rgba(255,255,255,0.8); margin-left: 8px; font-size: 0.8em;">(${p.phone})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile phone" onclick="toggleContactInfo(this, '${p.phone}', 'phone')" title="Click to show phone">📱</span>
+                                                    </span>
+                                                ` : ''}
+                                                ${isGoogleMember ? `
+                                                    <span class="contact-info-desktop" style="color: rgba(255,255,255,0.8); margin-left: 8px; font-size: 0.8em;">(${p.email})</span>
+                                                    <span class="contact-info-mobile" style="margin-left: 8px;">
+                                                        <span class="contact-icon-mobile email" onclick="toggleContactInfo(this, '${p.email}', 'email')" title="Click to show email">📧</span>
+                                                    </span>
+                                                ` : ''}
+                                            </div>
                                             ${p.positions && p.positions.length > 0 ? `<div style="font-size: 0.75em; opacity: 0.8; margin-top: 2px; color: rgba(255,255,255,0.8);">${p.positions.join(', ')}</div>` : p.position ? `<div style="font-size: 0.75em; opacity: 0.8; margin-top: 2px; color: rgba(255,255,255,0.8);">${p.position}</div>` : ''}
                                         </div>
                                     </div>
@@ -3555,6 +3635,43 @@ async function loadAndDisplayTeams() {
         `;
     }
 }
+
+// Mobile Contact Info Toggle Function
+function toggleContactInfo(iconElement, contactValue, contactType) {
+    // Find the parent element that contains the contact info
+    const parentContainer = iconElement.closest('.signup-player, .player-card');
+    if (!parentContainer) return;
+    
+    // Check if this contact info is already expanded
+    const existingExpanded = parentContainer.querySelector('.contact-info-expanded');
+    
+    if (existingExpanded) {
+        // If already expanded, hide it
+        existingExpanded.remove();
+    } else {
+        // Show the contact information
+        const expandedElement = document.createElement('div');
+        expandedElement.className = 'contact-info-expanded';
+        expandedElement.style.color = contactType === 'phone' ? '#007bff' : '#28a745';
+        expandedElement.innerHTML = `${contactType === 'phone' ? '📱' : '📧'} ${contactValue}`;
+        
+        // Insert after the icon's container
+        const mobileContainer = iconElement.closest('.contact-info-mobile');
+        if (mobileContainer) {
+            mobileContainer.insertAdjacentElement('afterend', expandedElement);
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                if (expandedElement.parentNode) {
+                    expandedElement.remove();
+                }
+            }, 3000);
+        }
+    }
+}
+
+// Make the function globally available
+window.toggleContactInfo = toggleContactInfo;
 
 // Duplicate removed - function now defined at top of file
 

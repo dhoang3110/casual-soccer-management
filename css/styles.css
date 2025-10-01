@@ -546,6 +546,15 @@ body {
     margin-bottom: 20px;
 }
 
+/* Contact Information Responsive Design */
+.contact-info-desktop {
+    display: inline-block;
+}
+
+.contact-info-mobile {
+    display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -586,6 +595,46 @@ body {
     /* Hide position text on mobile */
     .position-text-mobile-hide {
         display: none !important;
+    }
+    
+    /* Mobile contact info - hide text, show only clickable icons */
+    .contact-info-desktop {
+        display: none !important;
+    }
+    
+    .contact-info-mobile {
+        display: inline-block !important;
+    }
+    
+    .contact-icon-mobile {
+        display: inline-block;
+        padding: 4px 8px;
+        margin: 2px;
+        background: #007bff;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8em;
+        transition: all 0.2s ease;
+    }
+    
+    .contact-icon-mobile.email {
+        background: #28a745;
+    }
+    
+    .contact-icon-mobile:hover {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    
+    .contact-info-expanded {
+        display: inline-block !important;
+        background: #f8f9fa;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-top: 4px;
+        font-size: 0.8em;
+        border: 1px solid #dee2e6;
     }
     
     /* Mobile teams layout - stack vertically */

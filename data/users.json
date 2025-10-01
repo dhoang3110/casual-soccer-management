@@ -43,11 +43,11 @@
       "points": 2,
       "description": "Decent player, some experience"
     },
-    "lastLogin": 1759241607509,
-    "sessionActive": false,
-    "loggedOut": true,
-    "lastLogout": 1759241642842,
-    "lastActive": 1759241642852
+    "lastLogin": 1759293165114,
+    "sessionActive": true,
+    "loggedOut": false,
+    "lastLogout": null,
+    "lastActive": 1759293165126
   },
   "google_hoangngocdong@gmail.com": {
     "id": "google_hoangngocdong@gmail.com",
@@ -55,7 +55,7 @@
     "email": "hoangngocdong@gmail.com",
     "picture": "https://lh3.googleusercontent.com/a/ACg8ocI6QO5j7RqypSUUHw6A_NXzG-FtqrMEF64I9uOzDgUvOGQSGijF=s96-c",
     "provider": "google",
-    "lastActive": 1759274974533,
+    "lastActive": 1759291521067,
     "isProfileComplete": true,
     "name": "Dong Hoang",
     "skillLevel": "average",
@@ -66,7 +66,10 @@
     },
     "positions": [
       "any"
-    ]
+    ],
+    "sessionActive": false,
+    "loggedOut": true,
+    "lastLogout": 1759291521055
   },
   "google_donghoangngoc@gmail.com": {
     "id": "google_donghoangngoc@gmail.com",
@@ -92,13 +95,13 @@
   },
   "google_dong@guest.local": {
     "id": "google_dong@guest.local",
-    "googleId": "guest_1759223801376_glka32sca",
+    "googleId": "google_dong@guest.local",
     "email": "dong@guest.local",
-    "picture": "https://ui-avatars.com/api/?name=Dong&background=28a745&color=fff&bold=true",
+    "picture": "https://ui-avatars.com/api/?name=dong&background=28a745&color=fff&bold=true",
     "provider": "guest_casual",
-    "lastActive": 1759237383190,
+    "lastActive": 1759293163744,
     "isProfileComplete": true,
-    "name": "Dong",
+    "name": "dong",
     "skillLevel": "average",
     "skillInfo": {
       "label": "Average",
@@ -110,13 +113,13 @@
     ],
     "phone": "1234567890",
     "addedBy": "self",
-    "dateAdded": "2025-09-30T09:16:41.376Z",
+    "dateAdded": "2025-10-01T04:04:38.359Z",
     "status": "activated",
-    "firstLoginDate": "2025-09-30T09:16:41.376Z",
+    "firstLoginDate": "2025-10-01T04:04:38.359Z",
     "profileComplete": true,
     "sessionActive": false,
     "loggedOut": true,
-    "lastLogout": 1759237383178
+    "lastLogout": 1759293163735
   },
   "google_regsgsd@guest.local": {
     "id": "google_regsgsd@guest.local",
